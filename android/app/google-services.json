@@ -1,0 +1,110 @@
+{
+  "project_info": {
+    "project_number": "101862921480",
+    "firebase_url": "https://abstergo-e0b6e.firebaseio.com",
+    "project_id": "abstergo-e0b6e",
+    "storage_bucket": "abstergo-e0b6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101862921480:android:d2d78187b2244199",
+        "android_client_info": {
+          "package_name": "com.zeltrix.abstergoflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101862921480-cs8p9h021kud2cd9lobig824mn0mqlhe.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "101862921480-dbpiu8tbu60bu9isqb968uorgon79dnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfB7zfZdI1p2E8W2fK2fbZdc34dssFXDc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101862921480:android:50b6a95c2da9613a",
+        "android_client_info": {
+          "package_name": "me.zeltrix.abstergo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101862921480-cs8p9h021kud2cd9lobig824mn0mqlhe.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "101862921480-67gbiks1aed1m7d2leajon41qajh7h2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.zeltrix.abstergo",
+            "certificate_hash": "30ac2ea55c581e862154826bf88ffbdd42469aa3"
+          }
+        },
+        {
+          "client_id": "101862921480-oid6hjn9kd7950qu4gkgibuar4f7u73m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.zeltrix.abstergo",
+            "certificate_hash": "4dcad983d990d7e97af319874d96135de59862f3"
+          }
+        },
+        {
+          "client_id": "101862921480-auripfeomuhpc4qiq7rngfgf28rjc1p9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.zeltrix.abstergo",
+            "certificate_hash": "53edc7baed39662bb81be366b87eaf8cc52f34fe"
+          }
+        },
+        {
+          "client_id": "101862921480-dbpiu8tbu60bu9isqb968uorgon79dnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfB7zfZdI1p2E8W2fK2fbZdc34dssFXDc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101862921480-cs8p9h021kud2cd9lobig824mn0mqlhe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
