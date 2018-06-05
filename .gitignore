@@ -13,3 +13,13 @@ doc/api/
 
 # IntelliJ Config files
 .idea
+
+# Log files
+*.log
+
+# VS-Code files
+.vscode/
+
+# Flutter ignore
+.flutter-plugins
+pubspec.lock

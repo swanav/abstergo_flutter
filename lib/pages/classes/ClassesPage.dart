@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:local_notifications/local_notifications.dart';
-import 'models/class_details.dart';
+
+import 'package:abstergo_flutter/models/class_details.dart';
 
 class ClassesPage extends StatefulWidget {
   @override
   createState() => new _ClassesPageState();
-}
-
-void onClick(String payload) {
-  print(payload);
-}
-
-void notify(int classes) async {
-  await LocalNotifications.createNotification(
-    actions: [
-      new NotificationAction(actionText: "View", callback: onClick, payload: "Classes")
-    ],
-    title: 'Working Day',
-    content: 'You have $classes classes today'
-  );
 }
 
 class _ClassesPageState extends State<ClassesPage> with SingleTickerProviderStateMixin {
@@ -52,6 +38,8 @@ class _ClassesPageState extends State<ClassesPage> with SingleTickerProviderStat
         appBar: new TabBar(
           tabs: myTabs,
           indicatorColor: Colors.blue,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.grey,
           labelStyle:new TextStyle(fontWeight: FontWeight.bold),
           indicatorWeight: 2.0,
           unselectedLabelStyle: new TextStyle(fontWeight: FontWeight.normal),
@@ -100,11 +88,6 @@ class DayView extends StatelessWidget {
         );
       }
     );
-
-
-    //    return new ListView(
-//        children: dayViewGenerator(),
-//    );
   }
 }
 

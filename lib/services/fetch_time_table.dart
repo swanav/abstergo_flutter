@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FetchTimeTable {
@@ -24,10 +23,6 @@ class FetchTimeTable {
                 (DocumentSnapshot document) => document
             )
     );
-  }
-
-  void _saveToSql(String id, Map<String, String> map) {
-
   }
 
 }

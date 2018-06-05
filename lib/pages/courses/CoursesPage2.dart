@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 
-class CoursesPage extends StatefulWidget {
-  @override
-  createState() => new _CoursesPageState();
-}
+class CoursesPage extends StatelessWidget {
 
-
-
-class _CoursesPageState extends State<CoursesPage> {
-
-  List<SemesterListItem> _semesterList = [
+  final List<SemesterListItem> _semesterList = [
     new SemesterListItem(card: new SemesterCard(), isExpanded: true, gpa: 9.03, semesterNumber: 5),
     new SemesterListItem(card: new SemesterCard(), isExpanded: false, gpa: 8.84, semesterNumber: 4),
     new SemesterListItem(card: new SemesterCard(), isExpanded: false, gpa: 8.75, semesterNumber: 3),
@@ -19,11 +12,6 @@ class _CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     return new SingleChildScrollView(
         child: new ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  _semesterList[index].isExpanded = !isExpanded;
-                });
-              },
               children: _semesterList.map((SemesterListItem item) {
                 return new ExpansionPanel(
                     isExpanded: item.isExpanded,
@@ -31,7 +19,7 @@ class _CoursesPageState extends State<CoursesPage> {
                     body: item.card
                 );
               }).toList()
-            )
+            ),
     );
   }
 }
