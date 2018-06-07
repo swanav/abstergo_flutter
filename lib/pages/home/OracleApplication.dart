@@ -3,21 +3,22 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:abstergo_flutter/pages/layout/Body.dart';
 import 'package:abstergo_flutter/pages/layout/BottomBar.dart';
+import 'package:abstergo_flutter/pages/settings/SettingsPage.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
 import 'package:abstergo_flutter/Actions.dart';
 
 class OracleApplication extends StatefulWidget {
-
   final Store<AppState> store;
   final String title;
 
   OracleApplication({this.store, this.title});
 
   @override
-    createState() => _OracleApplicationState(store: store, title: title);
+  createState() => _OracleApplicationState(store: store, title: title);
 }
 
-class _OracleApplicationState extends State<OracleApplication> with WidgetsBindingObserver {
+class _OracleApplicationState extends State<OracleApplication>
+    with WidgetsBindingObserver {
   final Store<AppState> store;
   final String title;
 
@@ -47,12 +48,36 @@ class _OracleApplicationState extends State<OracleApplication> with WidgetsBindi
       appBar: AppBar(
         title: Text(title),
         actions: <Widget>[
+          _Refresh(),
           _Gear(),
         ],
       ),
       body: Body(),
       bottomNavigationBar: BottomBar(),
-      floatingActionButton: _FAB(),
+    );
+  }
+}
+
+class _Refresh extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, VoidCallback>(
+      converter: (Store<AppState> store) {
+        return () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => SettingsPage(),
+            ),
+          );
+        };
+      },
+      builder: (context, callback) {
+        return IconButton(
+          onPressed: callback,
+          color: Colors.white,
+          icon: Icon(Icons.settings),
+        );
+      },
     );
   }
 }
@@ -63,47 +88,16 @@ class _Gear extends StatelessWidget {
     return StoreConnector<AppState, VoidCallback>(
       converter: (Store<AppState> store) {
         return () {
-          print("FAB");
           return store.dispatch(PersonalInfoFetchAction);
         };
       },
       builder: (context, callback) {
         return IconButton(
           onPressed: callback,
-          icon: Icon(Icons.star),
+          color: Colors.white,
+          icon: Icon(Icons.refresh),
         );
       },
-    );
-  }
-}
-
-
-class _FAB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel>(
-      converter: _ViewModel.fromStore,
-      builder: (context, vm) {
-        return FloatingActionButton(
-          onPressed: () => vm.dispatch(PersonalInfoFetchAction),
-          elevation: 8.0,
-          backgroundColor: Colors.amber,
-          child: Icon(Icons.star),
-        );
-      },
-    );
-  }
-}
-
-class _ViewModel {
-  
-  final dynamic dispatch;
-
-  _ViewModel({this.dispatch});
-
-  static _ViewModel fromStore(Store<AppState> store) {
-    return _ViewModel(
-      dispatch: store.dispatch
     );
   }
 }

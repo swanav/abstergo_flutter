@@ -4,49 +4,102 @@ import 'package:abstergo_flutter/Actions.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
 import 'package:tkiosk/tkiosk.dart';
 
-loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
-  print('${new DateTime.now()}: ${action.runtimeType}');
-
+void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
+  print('${new DateTime.now()}: $action');
   next(action);
 }
 
-networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next) async {
+void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next) async {
 
   switch(action) {
     case PersonalInfoFetchAction:
-      getPersonalInfo(store);
+      store.dispatch(ExamInfoFetchAction);
+      store.dispatch(SemesterInfoFetchAction);
+      fetchPersonalInfo().then((PersonalInfo profile) {
+        store.dispatch(PersonalInfoUpdateAction(profile));
+      });
       break;
-    default:
-      print("No action required");
+    case ExamInfoFetchAction:
+      fetchExamGrades().then((List<ExamGrade> examGrades) {
+        store.dispatch(ExamGradesUpdateAction(examGrades));
+      });
+      fetchExamMarks().then((List<ExamMark> examMarks) {
+        store.dispatch(ExamMarksUpdateAction(examMarks));
+      });
+      break;
+    case SemesterInfoFetchAction:
+      fetchSemesterInfo().then((Map<Semester, List<Course>> semesters) {
+        store.dispatch(SemesterInfoUpdateAction(semesters));
+      });
+      break;
   }
-  
-  
-  print("passed");
+
   next(action);
 }
 
-getPersonalInfo(Store<AppState> store) {
+Future<PersonalInfo> fetchPersonalInfo() {
   WebKiosk swanav = WebKiosk("101504122", "2405");
   try {
-    swanav.login().then((bool loggedIn) {
+    return swanav.login().then((bool loggedIn) {
       if(loggedIn) {
-        print("logged in");
-        return swanav.personalInfo();
-      } else {
-        print("logged out");
+        return swanav.personalInfo().then((PersonalInfo profile) => profile);
       }
-      print("ye function toh khatam");
       return null;
-    }).then((PersonalInfo personalInfo) {
-      print("yahaan hu");
-      if(personalInfo != null) {
-        store.dispatch(PersonalInfoUpdateAction(personalInfo));
-        print(personalInfo.name);
-      } else {
-        print("Nahi hua yaar");
-      }
     });
   } catch(ex) {
     print(ex.toString());
   }
+  return null;
+}
+
+Future<Map<Semester, List<Course>>> fetchSemesterInfo() {
+  WebKiosk swanav = WebKiosk("101504122", "2405");
+  return swanav.login().then((bool loggedIn) {
+    if(loggedIn) {
+      return swanav.semesters()
+        .then((Map<Semester, List<Course>> semesters) {
+          if(semesters!=null) {
+            return semesters;
+          } else {
+            print("WTF");
+            return semesters;
+          }
+        })
+        .catchError((error) {
+          print("Error: $error");
+        });
+    }
+  }).catchError((error) {
+    print("Error: $error");
+  });
+}
+
+Future<List<ExamGrade>> fetchExamGrades() {
+  WebKiosk swanav = WebKiosk("101504122", "2405");
+  try {
+    return swanav.login().then((bool loggedIn) {
+      if(loggedIn) {
+        return swanav.examGrades().then((List<ExamGrade> examGrades) => examGrades);
+      }
+      return null;
+    });
+  } catch(ex) {
+    print(ex.toString());
+  }
+  return null;
+}
+
+Future<List<ExamMark>> fetchExamMarks() {
+  WebKiosk swanav = WebKiosk("101504122", "2405");
+  try {
+    return swanav.login().then((bool loggedIn) {
+      if(loggedIn) {
+        return swanav.examMarks().then((List<ExamMark> examMarks) => examMarks);
+      }
+      return null;
+    });
+  } catch(ex) {
+    print(ex.toString());
+  }
+  return null;
 }

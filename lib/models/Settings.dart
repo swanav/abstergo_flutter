@@ -4,6 +4,4 @@ class Settings {
 
   const Settings({this.updateInBackground = true});
 
-  static Settings defaultSettings() => Settings(updateInBackground: true);
-
 }

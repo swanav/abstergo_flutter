@@ -7,7 +7,6 @@ import 'package:abstergo_flutter/models/Settings.dart';
 import 'package:abstergo_flutter/Actions.dart';
 
 class SettingsToggle extends StatelessWidget {
-
   final String heading;
   final String description;
 
@@ -23,25 +22,28 @@ class SettingsToggle extends StatelessWidget {
           leading: Switch(
             value: vm.settings.updateInBackground,
             activeColor: Theme.of(context).accentColor,
-            onChanged: vm.dispatcher(SettingsChangeAction(Settings(updateInBackground: false))),
+            onChanged: (state) {
+              vm.dispatcher(
+                SettingsChangeAction(
+                  Settings(updateInBackground: state),
+                ),
+              );
+            },
           ),
         );
-      },  
+      },
     );
   }
 }
 
 class _ViewModel {
-
   final dynamic dispatcher;
-  final Settings settings; 
+  final Settings settings;
 
   _ViewModel({this.dispatcher, this.settings});
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
-      dispatcher: store.dispatch,
-      settings: store.state.settings
-    );
+        dispatcher: store.dispatch, settings: store.state.settings);
   }
 }

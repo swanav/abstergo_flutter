@@ -8,7 +8,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.SETTINGS_TITLE),
-        centerTitle: false,
+        centerTitle: true,
         primary: true,
       ),
       body: ListView(children: <Widget>[

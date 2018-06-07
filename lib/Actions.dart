@@ -16,6 +16,26 @@ class PersonalInfoUpdateAction {
   PersonalInfoUpdateAction(this.personalInfo);
 }
 
+class SemesterInfoFetchAction {}
+
+class SemesterInfoUpdateAction {
+  Map<Semester, List<Course>> semesters;
+  SemesterInfoUpdateAction(this.semesters);
+}
+
+
+class ExamInfoFetchAction {}
+
+class ExamMarksUpdateAction {
+  final List<ExamMark> examMarks;
+  ExamMarksUpdateAction(this.examMarks);
+}
+
+class ExamGradesUpdateAction {
+  final List<ExamGrade> examGrades;
+  ExamGradesUpdateAction(this.examGrades);
+}
+
 class SettingsChangeAction {
   final Settings settings;
   SettingsChangeAction(this.settings);

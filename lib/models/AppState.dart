@@ -9,47 +9,33 @@ class AppState {
   final int pageIndex;
 
   final Settings settings;
+
   final PersonalInfo personalInfo;
+  final List<ExamGrade> examGrades;
+  final List<ExamMark> examMarks;
+  final Map<Semester, List<Course>> semesters;
 
   AppState({
     this.count = 0,
     this.isLoading = false,
     this.pageIndex = 1,
     this.personalInfo,
-    this.settings = const Settings(updateInBackground: true),
+    this.examMarks,
+    this.examGrades,
+    this.semesters,
+    this.settings = const Settings(updateInBackground: true)//.defaultSettings(),
   });
 
-  factory AppState.loading() => AppState(
-      personalInfo: PersonalInfo(
-        "Swanav",
-        "101504122",
-        "Anuj Kumar",
-        "BE",
-        "ELE",
-        "7",
-        studentContact: ContactDetail("9821880713", "-", "sswanav@gmail.com"),
-        parentContact:
-            ContactDetail("8195904760", "-", "swanavswaroop@gmail.com"),
-        correspondenceAddress: Address(
-            "J-701, Mayurdhwaj Apartments,\nPlot No. 60,\nI. P. Extn.",
-            "",
-            "New Delhi",
-            "Delhi",
-            "110092"),
-        permanentAddress: Address(
-            "J-701, Mayurdhwaj Apartments,\nPlot No. 60, I.P. Extn.",
-            "",
-            "New Delhi",
-            "Delhi",
-            "110092"),
-      ),
-      isLoading: true);
+  factory AppState.loading() => AppState(isLoading: true);
 
   AppState copyWith({
     bool isLoading,
     int count,
     int pageIndex,
     PersonalInfo personalInfo,
+    List<ExamGrade> examGrades,
+    List<ExamMark> examMarks,
+    Map<Semester, List<Course>> semesters,
     Settings settings,
   }) {
     return AppState(
@@ -57,6 +43,9 @@ class AppState {
       count: count ?? this.count,
       pageIndex: pageIndex ?? this.pageIndex,
       personalInfo: personalInfo ?? this.personalInfo,
+      examGrades: examGrades ?? this.examGrades,
+      examMarks: examMarks ?? this.examMarks,
+      semesters: semesters ?? this.semesters,
       settings: settings ?? this.settings,
     );
   }
@@ -67,6 +56,9 @@ class AppState {
       count.hashCode ^
       pageIndex.hashCode ^
       personalInfo.hashCode ^
+      examMarks.hashCode ^
+      examGrades.hashCode ^
+      semesters.hashCode ^
       settings.hashCode;
 
   @override
@@ -78,6 +70,9 @@ class AppState {
           count == other.count &&
           pageIndex == other.pageIndex &&
           personalInfo == other.personalInfo &&
+          examGrades == other.examGrades &&
+          examMarks == other.examMarks &&
+          semesters == other.semesters &&
           settings == other.settings;
 
   @override
