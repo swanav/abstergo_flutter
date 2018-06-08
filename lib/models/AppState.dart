@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:tkiosk/tkiosk.dart';
+import 'package:abstergo_flutter/models/Setting.dart';
 import 'package:abstergo_flutter/models/Settings.dart';
+import 'package:abstergo_flutter/models/Session.dart';
 
 @immutable
 class AppState {
@@ -8,12 +10,14 @@ class AppState {
   final bool isLoading;
   final int pageIndex;
 
-  final Settings settings;
+  final Map<String, Setting> settings;
 
   final PersonalInfo personalInfo;
   final List<ExamGrade> examGrades;
   final List<ExamMark> examMarks;
   final Map<Semester, List<Course>> semesters;
+  final Session session;
+
 
   AppState({
     this.count = 0,
@@ -23,7 +27,8 @@ class AppState {
     this.examMarks,
     this.examGrades,
     this.semesters,
-    this.settings = const Settings(updateInBackground: true)//.defaultSettings(),
+    this.settings = defaultSettings,
+    this.session,
   });
 
   factory AppState.loading() => AppState(isLoading: true);
@@ -36,7 +41,8 @@ class AppState {
     List<ExamGrade> examGrades,
     List<ExamMark> examMarks,
     Map<Semester, List<Course>> semesters,
-    Settings settings,
+    Map<String, Setting> settings,
+    Session session,
   }) {
     return AppState(
       isLoading: isLoading ?? this.isLoading,
@@ -47,6 +53,7 @@ class AppState {
       examMarks: examMarks ?? this.examMarks,
       semesters: semesters ?? this.semesters,
       settings: settings ?? this.settings,
+      session: session ?? this.session
     );
   }
 
@@ -59,7 +66,8 @@ class AppState {
       examMarks.hashCode ^
       examGrades.hashCode ^
       semesters.hashCode ^
-      settings.hashCode;
+      settings.hashCode ^ 
+      session.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -73,7 +81,8 @@ class AppState {
           examGrades == other.examGrades &&
           examMarks == other.examMarks &&
           semesters == other.semesters &&
-          settings == other.settings;
+          settings == other.settings && 
+          session == other.session;
 
   @override
   String toString() {

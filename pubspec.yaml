@@ -18,6 +18,7 @@ dependencies:
   tkiosk:
     path: ../tkiosk/
   quick_actions: "^0.2.1"
+  flutter_stetho: "0.1.1"
 
 dev_dependencies:
   flutter_test:

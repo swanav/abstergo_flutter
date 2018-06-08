@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:redux/redux.dart';
 import 'package:abstergo_flutter/Actions.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
+import 'package:abstergo_flutter/models/Session.dart';
 import 'package:tkiosk/tkiosk.dart';
 
 void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
@@ -9,54 +10,87 @@ void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
   next(action);
 }
 
+void persistanceMiddleware(Store<AppState> store, action, NextDispatcher next) {
+
+  
+
+  next(action);
+}
+
 void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next) async {
+
+  if(action.runtimeType == LoginAction) {
+    attemptLogin(action.session).then((loginStatus) {
+      if(loginStatus) {
+        store.dispatch(LoginSuccessAction);
+      } else {
+        store.dispatch(LoginFailedAction);
+      }
+    });
+  }
 
   switch(action) {
     case PersonalInfoFetchAction:
-      store.dispatch(ExamInfoFetchAction);
       store.dispatch(SemesterInfoFetchAction);
-      fetchPersonalInfo().then((PersonalInfo profile) {
+      store.dispatch(ExamInfoFetchAction);
+      fetchPersonalInfo(store.state.session).then((PersonalInfo profile) {
         store.dispatch(PersonalInfoUpdateAction(profile));
-      });
+      }).catchError(errorHandler);
       break;
     case ExamInfoFetchAction:
-      fetchExamGrades().then((List<ExamGrade> examGrades) {
+      fetchExamGrades(store.state.session).then((List<ExamGrade> examGrades) {
         store.dispatch(ExamGradesUpdateAction(examGrades));
-      });
-      fetchExamMarks().then((List<ExamMark> examMarks) {
+      }).catchError(errorHandler);
+      fetchExamMarks(store.state.session).then((List<ExamMark> examMarks) {
         store.dispatch(ExamMarksUpdateAction(examMarks));
-      });
+      }).catchError(errorHandler);
       break;
     case SemesterInfoFetchAction:
-      fetchSemesterInfo().then((Map<Semester, List<Course>> semesters) {
+      fetchSemesterInfo(store.state.session).then((Map<Semester, List<Course>> semesters) {
         store.dispatch(SemesterInfoUpdateAction(semesters));
-      });
+      }).catchError(errorHandler);
       break;
   }
 
   next(action);
 }
 
-Future<PersonalInfo> fetchPersonalInfo() {
-  WebKiosk swanav = WebKiosk("101504122", "2405");
+Future<bool> attemptLogin(Session session) {
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
-    return swanav.login().then((bool loggedIn) {
+    return webkiosk.login();
+  } catch(ex) {
+    print(ex.toString());
+    return Future(() => false);
+  }
+}
+
+Future<PersonalInfo> fetchPersonalInfo(Session session) {
+  if(session == null) {
+    return Future(null);
+  }
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
+  try {
+    return webkiosk.login().then((bool loggedIn) {
       if(loggedIn) {
-        return swanav.personalInfo().then((PersonalInfo profile) => profile);
+        return webkiosk.personalInfo().then((PersonalInfo profile) => profile);
       }
-      return null;
+      return Future(null);
     });
   } catch(ex) {
     print(ex.toString());
   }
-  return null;
+  return Future(null);
 }
 
-Future<Map<Semester, List<Course>>> fetchSemesterInfo() {
-  WebKiosk swanav = WebKiosk("101504122", "2405");
-  return swanav.login().then((bool loggedIn) {
+Future<Map<Semester, List<Course>>> fetchSemesterInfo(Session session) {
+  if(session == null) {
+    return Future(null);
+  }
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
+  return webkiosk.login().then((bool loggedIn) {
     if(loggedIn) {
-      return swanav.semesters()
+      return webkiosk.semesters()
         .then((Map<Semester, List<Course>> semesters) {
           if(semesters!=null) {
             return semesters;
@@ -74,32 +108,42 @@ Future<Map<Semester, List<Course>>> fetchSemesterInfo() {
   });
 }
 
-Future<List<ExamGrade>> fetchExamGrades() {
-  WebKiosk swanav = WebKiosk("101504122", "2405");
+Future<List<ExamGrade>> fetchExamGrades(Session session) {
+  if(session == null) {
+    return Future(null);
+  }
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
-    return swanav.login().then((bool loggedIn) {
+    return webkiosk.login().then((bool loggedIn) {
       if(loggedIn) {
-        return swanav.examGrades().then((List<ExamGrade> examGrades) => examGrades);
+        return webkiosk.examGrades().then((List<ExamGrade> examGrades) => examGrades);
       }
-      return null;
+      return Future(null);
     });
   } catch(ex) {
     print(ex.toString());
   }
-  return null;
+  return Future(null);
 }
 
-Future<List<ExamMark>> fetchExamMarks() {
-  WebKiosk swanav = WebKiosk("101504122", "2405");
+Future<List<ExamMark>> fetchExamMarks(Session session) {
+  if(session == null) {
+    return Future(null);
+  }
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
-    return swanav.login().then((bool loggedIn) {
+    return webkiosk.login().then((bool loggedIn) {
       if(loggedIn) {
-        return swanav.examMarks().then((List<ExamMark> examMarks) => examMarks);
+        return webkiosk.examMarks().then((List<ExamMark> examMarks) => examMarks);
       }
-      return null;
+      return Future(null);
     });
   } catch(ex) {
     print(ex.toString());
   }
-  return null;
+  return Future(null);
+}
+
+errorHandler(e) {
+  print(e);
 }

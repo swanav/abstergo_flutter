@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:abstergo_flutter/pages/login/login.dart';
 import 'package:abstergo_flutter/pages/layout/Body.dart';
 import 'package:abstergo_flutter/pages/layout/BottomBar.dart';
 import 'package:abstergo_flutter/pages/settings/SettingsPage.dart';
@@ -44,17 +45,40 @@ class _OracleApplicationState extends State<OracleApplication>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: <Widget>[
-          _Refresh(),
-          _Gear(),
-        ],
-      ),
-      body: Body(),
-      bottomNavigationBar: BottomBar(),
-    );
+    return StoreConnector<AppState, _ViewModel>(
+        converter: _ViewModel.fromStore,
+        builder: (context, vm) {
+          if (!vm.isLoggedIn) {
+            return LoginPage();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              actions: <Widget>[
+                _Refresh(),
+                _Gear(),
+              ],
+            ),
+            body: Body(),
+            bottomNavigationBar: BottomBar(),
+          );
+        });
+  }
+}
+
+class _ViewModel {
+  final bool isLoggedIn;
+
+  _ViewModel({this.isLoggedIn});
+
+  static _ViewModel fromStore(Store<AppState> store) {
+    bool isLoggedIn;
+    if(store.state.session == null) {
+      isLoggedIn = false;
+    } else {
+      isLoggedIn = store.state.session.isValid;
+    }
+    return _ViewModel(isLoggedIn: isLoggedIn);
   }
 }
 
@@ -65,10 +89,10 @@ class _Refresh extends StatelessWidget {
       converter: (Store<AppState> store) {
         return () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) => SettingsPage(),
-            ),
-          );
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SettingsPage(),
+                ),
+              );
         };
       },
       builder: (context, callback) {

@@ -1,7 +1,8 @@
 import 'package:tkiosk/tkiosk.dart';
 import 'package:abstergo_flutter/Actions.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/models/Settings.dart';
+import 'package:abstergo_flutter/models/Setting.dart';
+import 'package:abstergo_flutter/models/Session.dart';
 
 AppState appReducer(AppState state, action) {
   return AppState(
@@ -13,7 +14,24 @@ AppState appReducer(AppState state, action) {
     examMarks: examMarksReducer(state.examMarks, action),
     examGrades: examGradesReducer(state.examGrades, action),
     semesters: semestersInfoReducer(state.semesters, action),
+    session: sessionReducer(state.session, action),
   );
+}
+
+Session sessionReducer(Session session, action) {
+  if(action == LogoutAction) {
+    return null;
+  }
+  if(action.runtimeType == LoginAction) {
+    return action.session;
+  } else if(action == LoginSuccessAction ) {
+    return Session(
+      password: session.password,
+      username: session.username,
+      isValid: true,
+    );
+  }
+  return session;
 }
 
 PersonalInfo personalInfoReducer(PersonalInfo personalInfo, action) {
@@ -56,10 +74,13 @@ List<ExamGrade> examGradesReducer(List<ExamGrade> examGrades, action) {
   return examGrades;
 }
 
-Settings settingsReducer(Settings settings, action) {
-  switch(action) {
+Map<String, Setting> settingsReducer(Map<String, Setting> settings, action) {
+  switch(action.runtimeType) {
     case SettingsChangeAction:
-      return action.settings;
+      Map<String, Setting> newSettings = Map();
+      newSettings.addAll(settings);
+      newSettings[action.tag] = action.setting;
+      return newSettings;
     default:
       return settings;
   }

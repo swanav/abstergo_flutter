@@ -1,5 +1,6 @@
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/models/Settings.dart';
+import 'package:abstergo_flutter/models/Setting.dart';
+import 'package:abstergo_flutter/models/Session.dart';
 
 class IncrementCount {}
 
@@ -37,11 +38,23 @@ class ExamGradesUpdateAction {
 }
 
 class SettingsChangeAction {
-  final Settings settings;
-  SettingsChangeAction(this.settings);
+  final String tag;
+  final Setting setting;
+  SettingsChangeAction(this.tag, this.setting);
 }
 
 class NavigationChangeAction {
   final int pageIndex;
   NavigationChangeAction(this.pageIndex);
 }
+
+class LoginAction {
+  final Session session;
+  LoginAction(this.session);
+}
+
+class LoginSuccessAction {}
+
+class LoginFailedAction {}
+
+class LogoutAction {}

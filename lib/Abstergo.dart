@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-
 import 'package:abstergo_flutter/res/strings.dart';
 import 'package:abstergo_flutter/pages/home/OracleApplication.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
@@ -14,16 +13,13 @@ class Abstergo extends StatelessWidget {
   final theme = ThemeData(
     primaryColor: Colors.purple,
     accentColor: Colors.amber,
-    primaryTextTheme: TextTheme(
-      body1: TextStyle(color: Colors.black),
-    ),
   );
 
   final store = Store<AppState>(
-    appReducer, 
+    appReducer,
     initialState: AppState.loading(),
     middleware: [
-      loggingMiddleware, 
+      loggingMiddleware,
       networkRequestMiddleware,
     ],
   );
