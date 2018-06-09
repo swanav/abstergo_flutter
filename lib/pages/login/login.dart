@@ -3,9 +3,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:abstergo_flutter/Actions.dart';
 import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/models/Semester.dart';
 import 'package:abstergo_flutter/models/Session.dart';
-import 'package:tkiosk/tkiosk.dart';
 
 class LoginPage extends StatefulWidget {
   @override

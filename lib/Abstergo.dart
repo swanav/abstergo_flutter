@@ -11,7 +11,7 @@ class Abstergo extends StatelessWidget {
   final String applicationName = Strings.APP_TITLE;
 
   final theme = ThemeData(
-    primaryColor: Colors.purple,
+    primaryColor: Colors.blue,
     accentColor: Colors.amber,
   );
 

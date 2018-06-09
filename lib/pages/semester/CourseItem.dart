@@ -21,30 +21,33 @@ class CourseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Hero(
-                    tag: "code${course.code}",
+                    tag: "${course.code}_code",
                     child: _CourseCode(course.code),
                   ),
                   Hero(
-                    tag: "name${course.code}",
+                    tag: "name${course.code}_name",
                     child: _CourseName(course.name),
                   ),
                 ],
               ),
             ),
             Hero(
-              tag: "grade${course.code}",
+              tag: "${course.code}_grade",
               child: _Grade(grade),
             ),
           ],
         ),
       ),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CoursePage(
-                  course: course,
-                  marks: marks,
-                  grade: grade,
-                )));
+        Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CoursePage(
+                      course: course,
+                      marks: marks,
+                      grade: grade,
+                    ),
+              ),
+            );
       },
     );
   }
@@ -64,6 +67,7 @@ class _CourseCode extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 20.0,
+          color: Colors.black
         ),
       ),
     );
@@ -83,7 +87,7 @@ class _CourseName extends StatelessWidget {
         courseName,
         style: TextStyle(
           fontWeight: FontWeight.w300,
-          fontSize: 16.0,
+          fontSize: 14.0,
         ),
       ),
     );
@@ -129,7 +133,7 @@ class _Grade extends StatelessWidget {
               : CircleAvatar(
                   backgroundColor: _getColor(),
                   foregroundColor: Colors.white,
-                  minRadius: 24.0,
+                  radius: 18.0,
                   child: Text(grade.gradeObtained),
                 ),
         ],

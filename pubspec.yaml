@@ -6,7 +6,6 @@ dependencies:
     sdk: flutter
 
   android_alarm_manager: "^0.1.0"
-  cupertino_icons: "^0.1.0"
   cloud_firestore: "^0.3.2"
   flutter_redux: "^0.5.0"
   redux_thunk: "^0.2.0"
@@ -14,7 +13,6 @@ dependencies:
   intl: "^0.15.2"
   local_notifications: "^0.0.1"
   shared_preferences: "^0.4.0"
-  sqflite: '>=0.8.5'
   tkiosk:
     path: ../tkiosk/
   quick_actions: "^0.2.1"

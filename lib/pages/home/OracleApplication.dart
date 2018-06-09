@@ -53,9 +53,12 @@ class _OracleApplicationState extends State<OracleApplication>
           }
           return Scaffold(
             appBar: AppBar(
+              elevation: 0.0,
+              backgroundColor: Colors.blue,
+              centerTitle: true,
               title: Text(title),
+              leading: _Refresh(),
               actions: <Widget>[
-                _Refresh(),
                 _Gear(),
               ],
             ),
@@ -82,7 +85,7 @@ class _ViewModel {
   }
 }
 
-class _Refresh extends StatelessWidget {
+class _Gear extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, VoidCallback>(
@@ -106,7 +109,7 @@ class _Refresh extends StatelessWidget {
   }
 }
 
-class _Gear extends StatelessWidget {
+class _Refresh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, VoidCallback>(
