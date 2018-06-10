@@ -4,7 +4,7 @@ description: A new webkiosk.
 dependencies:
   flutter:
     sdk: flutter
-  android_alarm_manager: "^0.1.0"
+  android_alarm_manager: 
   cloud_firestore: 
   flutter_redux: "^0.5.0"
   redux_thunk: "^0.2.0"
