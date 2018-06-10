@@ -12,7 +12,7 @@ addons:
 before_install:
   - echo -e "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc
 before_script:
-  - git clone https://github.com/flutter/flutter.git -b alpha --depth 1
+  - git clone https://github.com/flutter/flutter.git -b dev --depth 1
   - ./flutter/bin/flutter doctor
 script:
   - ./flutter/bin/flutter test
