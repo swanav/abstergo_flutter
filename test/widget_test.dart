@@ -7,7 +7,7 @@
 //import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:abstergo_flutter/lib/abstergo.dart';
+import 'package:abstergo_flutter/abstergo.dart';
 
 void main() {
   testWidgets('Login Page encountered', (WidgetTester tester) async {
