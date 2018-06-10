@@ -78,13 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.4"
-  fluro:
-    dependency: "direct main"
-    description:
-      name: fluro
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -383,9 +376,11 @@ packages:
   tkiosk:
     dependency: "direct main"
     description:
-      path: "..\\tkiosk"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: c0e806d6f6e32c0e566450530b4f6221217421f1
+      url: "https://github.com/swanav/tkiosk.git"
+    source: git
     version: "0.0.1"
   typed_data:
     dependency: transitive
