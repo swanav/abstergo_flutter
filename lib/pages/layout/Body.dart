@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'package:abstergo_flutter/models/AppState.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
 
-import 'package:abstergo_flutter/pages/courses/CoursesPage.dart';
-import 'package:abstergo_flutter/pages/classes/ClassesPage.dart';
-import 'package:abstergo_flutter/pages/profile/ProfilePage.dart';
+import 'package:abstergo_flutter/pages/courses/courses_page.dart';
+import 'package:abstergo_flutter/pages/classes/classes_page.dart';
+import 'package:abstergo_flutter/pages/profile/profile_page.dart';
 
 class Body extends StatelessWidget {
   @override

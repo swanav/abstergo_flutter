@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/layout/SGPA.dart';
+import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 
 class SemesterCard extends StatelessWidget {
   final String examCode;

@@ -1,8 +1,8 @@
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/Actions.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/models/Setting.dart';
-import 'package:abstergo_flutter/models/Session.dart';
+import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/models/setting.dart';
+import 'package:abstergo_flutter/models/session.dart';
 
 AppState appReducer(AppState state, action) {
   return AppState(
@@ -15,7 +15,15 @@ AppState appReducer(AppState state, action) {
     examGrades: examGradesReducer(state.examGrades, action),
     semesters: semestersInfoReducer(state.semesters, action),
     session: sessionReducer(state.session, action),
+    subGroupData: subGroupDataReducer(state.subGroupData, action),
   );
+}
+
+Map<String,String> subGroupDataReducer(Map<String,String> subGroupData, action) {
+  if(action.runtimeType == SubGroupUpdateAction) {
+    return action.subgroupData;
+  }
+  return subGroupData;
 }
 
 Session sessionReducer(Session session, action) {

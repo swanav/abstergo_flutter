@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:redux/redux.dart';
-import 'package:abstergo_flutter/Actions.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/models/Session.dart';
+import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/models/session.dart';
 import 'package:tkiosk/tkiosk.dart';
 
 void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
@@ -35,6 +35,10 @@ void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next
       store.dispatch(ExamInfoFetchAction);
       fetchPersonalInfo(store.state.session).then((PersonalInfo profile) {
         store.dispatch(PersonalInfoUpdateAction(profile));
+      }).catchError(errorHandler);
+      fetchSubGroupInfo(store.state.session).then((Map data) {
+        print(data.length);
+        store.dispatch(SubGroupUpdateAction(data));
       }).catchError(errorHandler);
       break;
     case ExamInfoFetchAction:
@@ -74,6 +78,24 @@ Future<PersonalInfo> fetchPersonalInfo(Session session) {
     return webkiosk.login().then((bool loggedIn) {
       if(loggedIn) {
         return webkiosk.personalInfo().then((PersonalInfo profile) => profile);
+      }
+      return Future(null);
+    });
+  } catch(ex) {
+    print(ex.toString());
+  }
+  return Future(null);
+}
+
+Future<Map<String, String>> fetchSubGroupInfo(Session session) {
+  if(session == null) {
+    return Future(null);
+  }
+  WebKiosk webkiosk = WebKiosk(session.username, session.password);
+  try {
+    return webkiosk.login().then((bool loggedIn) {
+      if(loggedIn) {
+        return webkiosk.subGroup().then((Map<String,String> data) => data);
       }
       return Future(null);
     });

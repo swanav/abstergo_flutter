@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/Actions.dart';
-import 'package:abstergo_flutter/models/Setting.dart';
-import 'package:abstergo_flutter/models/Settings.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/models/setting.dart';
+import 'package:abstergo_flutter/models/settings.dart';
 import 'package:abstergo_flutter/res/strings.dart';
-import 'package:abstergo_flutter/pages/settings/SettingsToggle.dart';
+import 'package:abstergo_flutter/pages/settings/settings_toggle.dart';
 
 class SettingsPage extends StatelessWidget {
   @override

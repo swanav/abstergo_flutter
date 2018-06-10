@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:abstergo_flutter/Actions.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/models/Session.dart';
+import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/models/session.dart';
 
 class LoginPage extends StatefulWidget {
   @override

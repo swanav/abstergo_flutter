@@ -17,19 +17,20 @@ class SGPA extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(0.0),
         child: Container(
-          child: sgpa.isNaN
-              ? Text("Awaited")
-              : Text(
-                  sgpa.toStringAsPrecision(3),
-                  style: TextStyle(
-                    fontSize: 18.0, 
-                    fontWeight: FontWeight.w300, 
-                    color: Colors.black,
-                    
-                  ),
-                ),
+          child: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColorDark,
+            radius: 24.0,
+            child: Text(
+              sgpa.isNaN ? "-" : sgpa.toStringAsPrecision(3),
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w300,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     );

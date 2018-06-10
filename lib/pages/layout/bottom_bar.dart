@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'package:abstergo_flutter/Actions.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
+import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/pages/layout/navigation.dart';
 
 class BottomBar extends StatelessWidget {
@@ -12,11 +12,14 @@ class BottomBar extends StatelessWidget {
     return StoreConnector<AppState, _ViewModel>(
       converter: _ViewModel.fromStore,
       builder: (context, vm) {
-        return BottomNavigationBar(
-          onTap: vm.onTap,
-          currentIndex: vm.currentIndex,
-          type: BottomNavigationBarType.shifting,
-          items: navbarItems
+        return Material(
+          elevation: 4.0,
+          child: BottomNavigationBar(
+            onTap: vm.onTap,
+            currentIndex: vm.currentIndex,
+            type: BottomNavigationBarType.shifting,
+            items: navbarItems,
+          ),
         );
       },
     );
@@ -24,7 +27,6 @@ class BottomBar extends StatelessWidget {
 }
 
 class _ViewModel {
-  
   dynamic onTap;
   int currentIndex;
 

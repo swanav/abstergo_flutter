@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:abstergo_flutter/pages/login/login.dart';
-import 'package:abstergo_flutter/pages/layout/Body.dart';
-import 'package:abstergo_flutter/pages/layout/BottomBar.dart';
-import 'package:abstergo_flutter/pages/settings/SettingsPage.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/Actions.dart';
+import 'package:abstergo_flutter/pages/layout/body.dart';
+import 'package:abstergo_flutter/pages/layout/bottom_bar.dart';
+import 'package:abstergo_flutter/pages/layout/colors.dart';
+import 'package:abstergo_flutter/pages/settings/settings_page.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/actions.dart';
 
 class OracleApplication extends StatefulWidget {
   final Store<AppState> store;
@@ -46,33 +47,34 @@ class _OracleApplicationState extends State<OracleApplication>
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
-        converter: _ViewModel.fromStore,
-        builder: (context, vm) {
-          if (!vm.isLoggedIn) {
-            return LoginPage();
-          }
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 0.0,
-              backgroundColor: Colors.blue,
-              centerTitle: true,
-              title: Text(title),
-              leading: _Refresh(),
-              actions: <Widget>[
-                _Gear(),
-              ],
-            ),
-            body: Body(),
-            bottomNavigationBar: BottomBar(),
-          );
-        });
+      converter: _ViewModel.fromStore,
+      builder: (context, vm) {
+        if (!vm.isLoggedIn) {
+          return LoginPage();
+        }
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 4.0,
+            backgroundColor: colors[vm.pageIndex],
+            centerTitle: true,
+            title: Text(title),
+            leading: _Refresh(),
+            actions: <Widget>[
+              _Gear(),
+            ],
+          ),
+          body: Body(),
+          bottomNavigationBar: BottomBar(),
+        );
+    });
   }
 }
 
 class _ViewModel {
   final bool isLoggedIn;
+  final int pageIndex;
 
-  _ViewModel({this.isLoggedIn});
+  _ViewModel({this.isLoggedIn, this.pageIndex});
 
   static _ViewModel fromStore(Store<AppState> store) {
     bool isLoggedIn;
@@ -81,7 +83,7 @@ class _ViewModel {
     } else {
       isLoggedIn = store.state.session.isValid;
     }
-    return _ViewModel(isLoggedIn: isLoggedIn);
+    return _ViewModel(isLoggedIn: isLoggedIn, pageIndex: store.state.pageIndex);
   }
 }
 

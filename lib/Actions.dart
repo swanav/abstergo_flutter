@@ -1,6 +1,6 @@
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/models/Setting.dart';
-import 'package:abstergo_flutter/models/Session.dart';
+import 'package:abstergo_flutter/models/setting.dart';
+import 'package:abstergo_flutter/models/session.dart';
 
 class IncrementCount {}
 
@@ -24,6 +24,10 @@ class SemesterInfoUpdateAction {
   SemesterInfoUpdateAction(this.semesters);
 }
 
+class SubGroupUpdateAction {
+  final Map<String, String> subgroupData;
+  SubGroupUpdateAction(this.subgroupData); 
+}
 
 class ExamInfoFetchAction {}
 

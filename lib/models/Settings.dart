@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:abstergo_flutter/models/Setting.dart';
+import 'package:abstergo_flutter/models/setting.dart';
 
 class Settings {
   static const String BACKGROUND_UPDATES = "background-updates";

@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/semester/SemesterPage.dart';
-import 'package:abstergo_flutter/pages/courses/SemesterCard.dart';
-import 'package:abstergo_flutter/animations/CustomScrollPhysics.dart';
+import 'package:abstergo_flutter/pages/semester/semester_page.dart';
+import 'package:abstergo_flutter/pages/courses/semester_card.dart';
+import 'package:abstergo_flutter/animations/custom_scroll_physics.dart';
 
 class ColorChoices {
   static const List<Color> colors = [
-    const Color(0xFF5A89E6),
-    const Color(0xFFF77B67),
-    const Color(0xFF4EC5AC),
-    const Color(0xFF5A89E6),
-    const Color(0xFFF77B67),
-    const Color(0xFF4EC5AC),
-    const Color(0xFF5A89E6),
-    const Color(0xFFF77B67),
-    const Color(0xFF5A89E6),
-    const Color(0xFFF77B67),
+    Colors.amber,
+    Colors.blue,
+    Colors.orange,
+    Colors.yellow,
+    Colors.purple,
+    Colors.teal,
+    Colors.lime,
+    Colors.cyan
   ];
 }
 

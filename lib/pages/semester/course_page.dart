@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/layout/Grade.dart';
+import 'package:abstergo_flutter/pages/layout/grade.dart';
 
 class CoursePage extends StatefulWidget {
   final Course course;
@@ -28,7 +28,9 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
         lowerBound: 0.0,
         upperBound: 1.0);
 
-    percentComplete = (widget.grade == null)?0.0:widget.grade.getGradePoint().toDouble() / 10;
+    percentComplete = (widget.grade == null)
+        ? 0.0
+        : widget.grade.getGradePoint().toDouble() / 10;
     barPercent = percentComplete;
     animationBar = new AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100))
@@ -92,49 +94,53 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                new Padding(
+                Container(
                   padding: const EdgeInsets.only(bottom: 30.0),
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
-                      tag: widget.course.code + "_icon",
+                      tag: widget.course.code + "_grade",
                       child: Grade(widget.grade),
                     ),
                   ),
                 ),
-                new Padding(
+                Container(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: new Align(
+                    alignment: Alignment.bottomRight,
+                    child: new Hero(
+                      tag: widget.course.code + "_credits",
+                      child: new Material(
+                        color: Colors.transparent,
+                        child: new Text(
+                          "${widget.course.credits.toStringAsPrecision(2)} Credits",
+                          style: new TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
                       tag: widget.course.code + "_code",
-                      child: new Material(
-                        color: Colors.transparent,
-                        child: new Text(
-                          widget.course.code,
-                          style: new TextStyle(),
-                        ),
-                      ),
+                      child: _CourseCode(widget.course.code),
                     ),
                   ),
                 ),
-                new Padding(
+                Container(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
                       tag: widget.course.code + "_name",
-                      child: new Material(
-                        color: Colors.transparent,
-                        child: new Text(
-                          widget.course.name,
-                          style: new TextStyle(fontSize: 20.0),
-                        ),
-                      ),
+                      child: _CourseName(widget.course.name),
                     ),
                   ),
                 ),
-                new Padding(
+                Container(
                   padding: const EdgeInsets.only(bottom: 30.0),
                   child: new Align(
                     alignment: Alignment.bottomLeft,
@@ -144,7 +150,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                         color: Colors.transparent,
                         child: new Row(
                           children: <Widget>[
-                            new Expanded(
+                            Expanded(
                               child: new LinearProgressIndicator(
                                 value: barPercent,
                                 backgroundColor: Colors.grey.withAlpha(50),
@@ -152,9 +158,12 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                                     Colors.cyan),
                               ),
                             ),
-                            new Padding(
+                            Container(
                               padding: const EdgeInsets.only(left: 5.0),
-                              child: Text(((widget.grade == null || widget.grade.getGradePoint().isNaN)
+                              child: Text(((widget.grade == null ||
+                                              widget.grade
+                                                  .getGradePoint()
+                                                  .isNaN)
                                           ? 0
                                           : widget.grade.getGradePoint() * 10)
                                       .toStringAsPrecision(3) +
@@ -181,96 +190,38 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
   }
 }
 
-// class CoursePage extends StatelessWidget {
-//   final Course course;
-//   final List<ExamMark> marks;
-//   final ExamGrade grade;
+class _CourseCode extends StatelessWidget {
+  final String courseCode;
 
-//   CoursePage({this.course, this.marks, this.grade});
+  _CourseCode(this.courseCode);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: Text("Subject Details"),
-//       ),
-//       primary: true,
-//       body: Container(
-//           child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: <Widget>[
-//           Hero(
-//             tag: "code-${course.code}",
-//             child: _CourseCode(course.code),
-//           ),
-//           Hero(
-//             tag: "name-${course.code}",
-//             child: _CourseName(course.name),
-//           ),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: <Widget>[
-//               Hero(
-//                 tag: "grade-${course.code}",
-//                 child: _Grade(grade),
-//               ),
-//             ],
-//           ),
-//           Expanded(
-//             child: Container(
-//               child: _MarksList(marks),
-//             ),
-//           )
-//         ],
-//       )),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Text(
+        courseCode,
+      ),
+    );
+  }
+}
 
-// class _CourseCode extends StatelessWidget {
-//   final String courseCode;
+class _CourseName extends StatelessWidget {
+  final String courseName;
 
-//   _CourseCode(this.courseCode);
+  _CourseName(this.courseName);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Center(
-//         child: Text(
-//           courseCode,
-//           style: TextStyle(
-//             fontSize: 20.0,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class _CourseName extends StatelessWidget {
-//   final String courseName;
-
-//   _CourseName(this.courseName);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Center(
-//         child: Text(
-//           courseName,
-//           style: TextStyle(
-//             fontSize: 16.0,
-//             fontWeight: FontWeight.w300,
-//           ),
-//           textAlign: TextAlign.center,
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Text(
+        courseName,
+        style: TextStyle(fontSize: 20.0),
+      ),
+    );
+  }
+}
 
 class _MarksList extends StatelessWidget {
   final List<ExamMark> marks;

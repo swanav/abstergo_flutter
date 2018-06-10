@@ -32,18 +32,12 @@ class Grade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          grade == null
-              ? Text("Awaited")
-              : CircleAvatar(
-                  backgroundColor: _getColor(),
-                  foregroundColor: Colors.white,
-                  radius: 18.0,
-                  child: Text(grade?.gradeObtained),
-                ),
-        ],
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: CircleAvatar(
+        backgroundColor: grade == null ? Theme.of(context).primaryColorDark:_getColor(),
+        foregroundColor: Colors.white,
+        radius: 24.0,
+        child: Text((grade == null) ? "-" : grade?.gradeObtained),
       ),
     );
   }

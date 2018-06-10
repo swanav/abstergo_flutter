@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/models/AppState.dart';
-import 'package:abstergo_flutter/pages/courses/CourseContent.dart';
+import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:abstergo_flutter/pages/courses/course_content.dart';
 
 class CoursesPage extends StatelessWidget {
   @override

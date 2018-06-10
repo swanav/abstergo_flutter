@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/models/Setting.dart';
-import 'package:abstergo_flutter/models/Settings.dart';
-import 'package:abstergo_flutter/models/Session.dart';
+import 'package:abstergo_flutter/models/setting.dart';
+import 'package:abstergo_flutter/models/settings.dart';
+import 'package:abstergo_flutter/models/session.dart';
 
 @immutable
 class AppState {
@@ -17,6 +17,7 @@ class AppState {
   final List<ExamMark> examMarks;
   final Map<Semester, List<Course>> semesters;
   final Session session;
+  final Map<String, String> subGroupData;
 
 
   AppState({
@@ -29,6 +30,7 @@ class AppState {
     this.semesters,
     this.settings = defaultSettings,
     this.session,
+    this.subGroupData
   });
 
   factory AppState.loading() => AppState(isLoading: true);
@@ -42,6 +44,7 @@ class AppState {
     List<ExamMark> examMarks,
     Map<Semester, List<Course>> semesters,
     Map<String, Setting> settings,
+    Map<String, String> subGroupData,
     Session session,
   }) {
     return AppState(
@@ -53,7 +56,8 @@ class AppState {
       examMarks: examMarks ?? this.examMarks,
       semesters: semesters ?? this.semesters,
       settings: settings ?? this.settings,
-      session: session ?? this.session
+      session: session ?? this.session,
+      subGroupData: subGroupData ?? this.subGroupData,
     );
   }
 
@@ -67,7 +71,8 @@ class AppState {
       examGrades.hashCode ^
       semesters.hashCode ^
       settings.hashCode ^ 
-      session.hashCode;
+      session.hashCode ^
+      subGroupData.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -82,7 +87,8 @@ class AppState {
           examMarks == other.examMarks &&
           semesters == other.semesters &&
           settings == other.settings && 
-          session == other.session;
+          session == other.session && 
+          subGroupData == other.subGroupData;
 
   @override
   String toString() {

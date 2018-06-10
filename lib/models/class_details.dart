@@ -6,7 +6,14 @@ class ClassDetails {
   String classType;
   String classTime;
 
-  ClassDetails(this.courseName, this.venue, this.facultyName, this.classType, this.classTime, {this.courseCode} );
+  ClassDetails({
+    this.courseName,
+    this.venue,
+    this.facultyName,
+    this.classType,
+    this.classTime,
+    this.courseCode,
+  });
 
   ClassDetails.fromMap(Map<dynamic, dynamic> data) {
     courseName = data["courseName"];
@@ -17,10 +24,8 @@ class ClassDetails {
     classTime = data["time"];
   }
 
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> details = new Map();
-    details = {
+  Map<String, String> toMap() {
+    return {
       'courseName': courseName,
       'courseCode': courseCode,
       'venue': venue,
@@ -28,7 +33,5 @@ class ClassDetails {
       'time': classTime,
       'type': classType
     };
-    return details;
   }
-
 }

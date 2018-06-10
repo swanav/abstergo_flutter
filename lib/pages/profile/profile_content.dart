@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
 
 import 'package:abstergo_flutter/res/keys.dart';
-import 'package:abstergo_flutter/pages/profile/ProfileHeadIcon.dart';
-import 'package:abstergo_flutter/pages/profile/ProfileHeadText.dart';
-import 'package:abstergo_flutter/pages/profile/ProfileBodyItem.dart';
+import 'package:abstergo_flutter/pages/profile/profile_head_icon.dart';
+import 'package:abstergo_flutter/pages/profile/profile_head_text.dart';
+import 'package:abstergo_flutter/pages/profile/profile_body_item.dart';
 
 class ProfileContent extends StatelessWidget {
   final PersonalInfo personalInfo;
@@ -18,7 +18,7 @@ class ProfileContent extends StatelessWidget {
         Material(
           elevation: 4.0,
           child: Container(
-            color: Theme.of(context).primaryColor,
+            color: Colors.orange,
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Column(
               children: <Widget>[

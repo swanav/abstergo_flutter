@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/semester/CourseItem.dart';
-import 'package:abstergo_flutter/pages/layout/SGPA.dart';
+import 'package:abstergo_flutter/pages/semester/course_item.dart';
+import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 
 class SemesterPage extends StatefulWidget {
   final String examCode;
@@ -33,7 +33,7 @@ class _SemesterPageState extends State<SemesterPage>
         lowerBound: 0.0,
         upperBound: 1.0);
 
-    percentComplete = widget.sgpa / 10;
+    percentComplete = (widget.sgpa.isNaN? 0 : widget.sgpa)/ 10;
     barPercent = percentComplete;
     animationBar = new AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100))
