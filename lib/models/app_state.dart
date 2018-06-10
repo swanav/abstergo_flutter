@@ -1,8 +1,9 @@
 import 'package:meta/meta.dart';
 import 'package:tkiosk/tkiosk.dart';
+
+import 'package:abstergo_flutter/models/session.dart';
 import 'package:abstergo_flutter/models/setting.dart';
 import 'package:abstergo_flutter/models/settings.dart';
-import 'package:abstergo_flutter/models/session.dart';
 
 @immutable
 class AppState {

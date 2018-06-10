@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
+
 import 'package:abstergo_flutter/pages/semester/course_item.dart';
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 
 class SemesterPage extends StatefulWidget {
   final String examCode;
@@ -67,7 +69,7 @@ class _SemesterPageState extends State<SemesterPage>
             elevation: 0.0,
             leading: new IconButton(
               icon: new Icon(
-                Icons.arrow_back,
+                AppIcons.NAV_BACK,
                 color: Colors.grey,
               ),
               onPressed: () {
@@ -82,7 +84,7 @@ class _SemesterPageState extends State<SemesterPage>
                   type: MaterialType.transparency,
                   child: new IconButton(
                     icon: new Icon(
-                      Icons.more_vert,
+                      AppIcons.NAV_MORE,
                       color: Colors.grey,
                     ),
                     onPressed: () {},

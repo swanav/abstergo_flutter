@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
+import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
-import 'package:abstergo_flutter/actions.dart';
 import 'package:abstergo_flutter/models/setting.dart';
 import 'package:abstergo_flutter/models/settings.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 import 'package:abstergo_flutter/res/strings.dart';
 import 'package:abstergo_flutter/pages/settings/settings_toggle.dart';
 
@@ -22,7 +24,7 @@ class SettingsPage extends StatelessWidget {
               actions: <Widget>[
                 IconButton(
                   onPressed: () {vm.dispatcher(context);},
-                  icon: Icon(Icons.exit_to_app),
+                  icon: Icon(AppIcons.SETTINGS_LOGOUT),
                   tooltip: "Logout",
                 )
               ],
@@ -54,7 +56,7 @@ class SettingsPage extends StatelessWidget {
                 ),
                 ListTile(
                   dense: true,
-                  leading: Icon(Icons.error_outline),
+                  leading: Icon(AppIcons.SETTINGS_ALERT),
                   title: Text(
                     "You cannot change your username and password. Please logout and login again with your new credentials.",
                   ),

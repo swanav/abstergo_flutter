@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:abstergo_flutter/models/setting.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 
 class Settings {
   static const String BACKGROUND_UPDATES = "background-updates";
@@ -20,19 +20,19 @@ const Map<String, Setting> defaultSettings = {
   Settings.BACKGROUND_UPDATES: Setting<bool>(
     heading: "Background Updates",
     description: "Update in background",
-    icon: Icons.refresh,
+    icon: AppIcons.SETTINGS_BACKGROUND,
     value: true,
   ),
   Settings.USER_NAME: Setting<String>(
     heading: "Roll Number",
     description: "Please enter your roll number",
-    icon: Icons.face,
+    icon: AppIcons.SETTINGS_USERNAME,
     value: null
   ),
   Settings.PASSWORD: Setting<String>(
     heading: "Password",
     description: "Please enter your password",
-    icon: Icons.lock,
+    icon: AppIcons.SETTINGS_PASSWORD,
     value: null
   ),
 };

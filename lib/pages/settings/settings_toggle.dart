@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:abstergo_flutter/models/setting.dart';
 import 'package:abstergo_flutter/models/settings.dart';
-import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/redux/actions.dart';
 
 class SettingsToggle extends StatelessWidget {
   final String tag;

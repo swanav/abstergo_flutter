@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
 
-import 'package:abstergo_flutter/res/keys.dart';
 import 'package:abstergo_flutter/pages/profile/profile_head_icon.dart';
 import 'package:abstergo_flutter/pages/profile/profile_head_text.dart';
 import 'package:abstergo_flutter/pages/profile/profile_body_item.dart';
+import 'package:abstergo_flutter/res/keys.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 
 class ProfileContent extends StatelessWidget {
   final PersonalInfo personalInfo;
@@ -39,33 +40,33 @@ class ProfileContent extends StatelessWidget {
                 ProfileBodyItem(
                   header: "Father",
                   value: personalInfo.fatherName,
-                  icon: Icons.face,
+                  icon: AppIcons.PROFILE_FATHER,
                 ),
                 Divider(color: Colors.grey, height: 2.0),
                 ProfileBodyItem(
                   header: "Mobile",
                   value: personalInfo.studentContact.mobile,
                   secValue: personalInfo.parentContact.mobile,
-                  icon: Icons.phone,
+                  icon: AppIcons.PROFILE_MOBILE,
                 ),
                 Divider(color: Colors.grey, height: 2.0),
                 ProfileBodyItem(
                   header: "Email",
                   value: personalInfo.studentContact.email,
                   secValue: personalInfo.parentContact.email,
-                  icon: Icons.mail,
+                  icon: AppIcons.PROFILE_EMAIL,
                 ),
                 Divider(color: Colors.grey, height: 2.0),
                 ProfileBodyItem(
                   header: "Correspondance Address",
                   address: personalInfo.correspondenceAddress,
-                  icon: Icons.home,
+                  icon: AppIcons.PROFILE_ADDRESS,
                 ),
                 Divider(color: Colors.grey, height: 2.0),
                 ProfileBodyItem(
                   header: "Permanent Address",
                   address: personalInfo.permanentAddress,
-                  icon: Icons.home,
+                  icon: AppIcons.PROFILE_ADDRESS,
                 ),
               ],
             ),

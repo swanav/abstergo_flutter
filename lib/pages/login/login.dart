@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/models/session.dart';
 

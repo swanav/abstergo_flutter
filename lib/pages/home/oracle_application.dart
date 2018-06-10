@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
 import 'package:abstergo_flutter/pages/login/login.dart';
 import 'package:abstergo_flutter/pages/layout/body.dart';
 import 'package:abstergo_flutter/pages/layout/bottom_bar.dart';
 import 'package:abstergo_flutter/pages/layout/colors.dart';
 import 'package:abstergo_flutter/pages/settings/settings_page.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
-import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/redux/actions.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 
 class OracleApplication extends StatefulWidget {
   final Store<AppState> store;
@@ -104,7 +106,7 @@ class _Gear extends StatelessWidget {
         return IconButton(
           onPressed: callback,
           color: Colors.white,
-          icon: Icon(Icons.settings),
+          icon: Icon(AppIcons.SETTINGS),
         );
       },
     );
@@ -124,7 +126,7 @@ class _Refresh extends StatelessWidget {
         return IconButton(
           onPressed: callback,
           color: Colors.white,
-          icon: Icon(Icons.refresh),
+          icon: Icon(AppIcons.APP_REFRESH),
         );
       },
     );

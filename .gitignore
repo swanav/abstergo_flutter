@@ -13,6 +13,7 @@ doc/api/
 
 # IntelliJ Config files
 .idea
+*.iml
 
 # Log files
 *.log

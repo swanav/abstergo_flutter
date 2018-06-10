@@ -1,5 +1,5 @@
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/models/setting.dart';
 import 'package:abstergo_flutter/models/session.dart';

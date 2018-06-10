@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
+
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
+import 'package:abstergo_flutter/res/icons.dart';
 
 class SemesterCard extends StatelessWidget {
   final String examCode;
@@ -66,7 +68,10 @@ class SemesterCard extends StatelessWidget {
                               color: Colors.transparent,
                               type: MaterialType.transparency,
                               child: IconButton(
-                                icon: Icon(Icons.more_vert, color: Colors.grey),
+                                icon: Icon(
+                                  AppIcons.NAV_MORE,
+                                  color: Colors.grey,
+                                ),
                                 onPressed: () {},
                               ),
                             ),

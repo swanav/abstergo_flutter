@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:redux/redux.dart';
-import 'package:abstergo_flutter/actions.dart';
+import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/models/session.dart';
 import 'package:tkiosk/tkiosk.dart';
