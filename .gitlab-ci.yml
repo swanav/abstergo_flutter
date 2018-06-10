@@ -1,0 +1,15 @@
+stages: 
+    - build
+    - test
+
+before_script:
+    - git clone https://github.com/flutter/flutter.git -b dev --depth 1
+    - ./flutter/bin/flutter doctor
+
+job1: 
+    - stage: build
+    - script: ./flutter/bin/flutter build
+    
+job2:
+    - stage: test
+    - script: ./flutter/bin/flutter test
