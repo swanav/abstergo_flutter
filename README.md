@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/swanav/abstergo_flutter.svg?token=PerRm53nxVW8pcc3QUkM&branch=master)](https://travis-ci.com/swanav/abstergo_flutter)
+
 # abstergo_flutter
 
 A new webkiosk.
