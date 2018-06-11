@@ -1,10 +1,17 @@
+import 'package:redux_persist/redux_persist.dart';
 import 'package:tkiosk/tkiosk.dart';
+
 import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/models/setting.dart';
 import 'package:abstergo_flutter/models/session.dart';
 
 AppState appReducer(AppState state, action) {
+
+  if(action is PersistLoadedAction<AppState>) {
+    return action.state ?? state;
+  }
+
   return AppState(
     count: countReducer(state.count, action),
     isLoading: loadingReducer(state.isLoading, action),

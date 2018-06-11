@@ -49,26 +49,26 @@ class _OracleApplicationState extends State<OracleApplication>
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
-      converter: _ViewModel.fromStore,
-      builder: (context, vm) {
-        if (!vm.isLoggedIn) {
-          return LoginPage();
-        }
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 4.0,
-            backgroundColor: colors[vm.pageIndex],
-            centerTitle: true,
-            title: Text(title),
-            leading: _Refresh(),
-            actions: <Widget>[
-              _Gear(),
-            ],
-          ),
-          body: Body(),
-          bottomNavigationBar: BottomBar(),
-        );
-    });
+        converter: _ViewModel.fromStore,
+        builder: (context, vm) {
+          if (!vm.isLoggedIn) {
+            return LoginPage();
+          }
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 4.0,
+              backgroundColor: colors[vm.pageIndex],
+              centerTitle: true,
+              title: Text(title),
+              leading: _Refresh(),
+              actions: <Widget>[
+                _Gear(),
+              ],
+            ),
+            body: Body(),
+            bottomNavigationBar: BottomBar(),
+          );
+        });
   }
 }
 
@@ -80,7 +80,7 @@ class _ViewModel {
 
   static _ViewModel fromStore(Store<AppState> store) {
     bool isLoggedIn;
-    if(store.state.session == null) {
+    if (store.state.session == null) {
       isLoggedIn = false;
     } else {
       isLoggedIn = store.state.session.isValid;
@@ -91,44 +91,40 @@ class _ViewModel {
 
 class _Gear extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, VoidCallback>(
-      converter: (Store<AppState> store) {
-        return () {
-          Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SettingsPage(),
-                ),
-              );
-        };
-      },
-      builder: (context, callback) {
-        return IconButton(
-          onPressed: callback,
-          color: Colors.white,
-          icon: Icon(AppIcons.SETTINGS),
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => StoreConnector<AppState, VoidCallback>(
+        converter: (Store<AppState> store) {
+          return () {
+            Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SettingsPage(),
+                  ),
+                );
+          };
+        },
+        builder: (context, callback) {
+          return IconButton(
+            onPressed: callback,
+            color: Colors.white,
+            icon: Icon(AppIcons.SETTINGS),
+          );
+        },
+      );
 }
 
 class _Refresh extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, VoidCallback>(
-      converter: (Store<AppState> store) {
-        return () {
-          return store.dispatch(PersonalInfoFetchAction);
-        };
-      },
-      builder: (context, callback) {
-        return IconButton(
-          onPressed: callback,
-          color: Colors.white,
-          icon: Icon(AppIcons.APP_REFRESH),
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => StoreConnector<AppState, VoidCallback>(
+        converter: (Store<AppState> store) {
+          return () {
+            return store.dispatch(PersonalInfoFetchAction);
+          };
+        },
+        builder: (context, callback) {
+          return IconButton(
+            onPressed: callback,
+            color: Colors.white,
+            icon: Icon(AppIcons.APP_REFRESH),
+          );
+        },
+      );
 }

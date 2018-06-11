@@ -10,12 +10,6 @@ void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
   next(action);
 }
 
-void persistanceMiddleware(Store<AppState> store, action, NextDispatcher next) {
-
-  
-
-  next(action);
-}
 
 void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next) async {
 

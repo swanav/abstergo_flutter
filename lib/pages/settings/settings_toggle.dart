@@ -21,7 +21,7 @@ class SettingsToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(setting.icon),
+      // leading: Icon(setting.icon),
       title: Text(setting.heading),
       subtitle: Text(setting.description == null ? '' : setting.description),
       trailing: Switch(

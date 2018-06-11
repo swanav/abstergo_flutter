@@ -6,8 +6,7 @@
 
 //import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:abstergo_flutter/Abstergo.dart';
+import 'package:abstergo_flutter/abstergo.dart';
 
 void main() {
   testWidgets('Login Page encountered', (WidgetTester tester) async {
@@ -19,14 +18,5 @@ void main() {
     expect(find.text('Password'), findsOneWidget);
     expect(find.text('Submit'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    // await tester.enterText(find.text('Roll Number'), '101504122');
-    // await tester.enterText(find.text('Password'), '2405');
-    // await tester.tap(find.text('Submit'));
-    // await tester.pump();
-
-    // Verify that our counter has incremented.
-    // expect(find.text('Login'), findsNothing);
-    // expect(find.text('1'), findsOneWidget);
   });
 }

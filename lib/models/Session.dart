@@ -5,4 +5,9 @@ class Session {
 
   Session({this.username, this.password, this.isValid = false});
 
+  Map toJson() => {
+        'isValid': isValid,
+        'username': username,
+        'password': password,
+      };
 }
