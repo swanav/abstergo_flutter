@@ -14,13 +14,22 @@ void loggingMiddleware(Store<AppState> store, action, NextDispatcher next) {
   next(action);
 }
 
-
-void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next) async {
-
-  if(action.runtimeType == LoginAction) {
+void networkRequestMiddleware(
+    Store<AppState> store, action, NextDispatcher next) async {
+  if (action.runtimeType == LoginAction) {
     attemptLogin(action.session).then((loginStatus) {
-      if(loginStatus) {
+      if (loginStatus) {
         store.dispatch(LoginSuccessAction);
+        Session session = action.session;
+        FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: "${session.username}@thapar.abstergo.me",
+          password: "${session.password}@tu123",
+        ).catchError((error) {
+          FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: "${session.username}@thapar.abstergo.me",
+            password: "${session.password}@tu123",
+          );
+        });
       } else {
         store.dispatch(LoginFailedAction);
       }
@@ -29,16 +38,17 @@ void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next
 
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
-  switch(action) {
+  switch (action) {
     case PersonalInfoFetchAction:
       store.dispatch(SemesterInfoFetchAction);
       store.dispatch(ExamInfoFetchAction);
       fetchPersonalInfo(store.state.session).then((PersonalInfo profile) {
-        store.dispatch(PersonalInfoUpdateAction(profile));
-        Firestore.instance.collection('profile').document(user.uid).setData(profile.toMap());
+        Firestore.instance
+            .collection('profile')
+            .document(user.uid)
+            .setData(profile.toMap());
       }).catchError(errorHandler);
       fetchSubGroupInfo(store.state.session).then((Map data) {
-        print(data.length);
         store.dispatch(SubGroupUpdateAction(data));
       }).catchError(errorHandler);
       break;
@@ -51,7 +61,8 @@ void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next
       }).catchError(errorHandler);
       break;
     case SemesterInfoFetchAction:
-      fetchSemesterInfo(store.state.session).then((Map<Semester, List<Course>> semesters) {
+      fetchSemesterInfo(store.state.session)
+          .then((Map<Semester, List<Course>> semesters) {
         store.dispatch(SemesterInfoUpdateAction(semesters));
       }).catchError(errorHandler);
       break;
@@ -64,67 +75,65 @@ Future<bool> attemptLogin(Session session) {
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
     return webkiosk.login();
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
     return Future(() => false);
   }
 }
 
 Future<PersonalInfo> fetchPersonalInfo(Session session) {
-  if(session == null) {
+  if (session == null) {
     return Future(null);
   }
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
     return webkiosk.login().then((bool loggedIn) {
-      if(loggedIn) {
+      if (loggedIn) {
         return webkiosk.personalInfo().then((PersonalInfo profile) => profile);
       }
       return Future(null);
     });
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
   }
   return Future(null);
 }
 
 Future<Map<String, String>> fetchSubGroupInfo(Session session) {
-  if(session == null) {
+  if (session == null) {
     return Future(null);
   }
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
     return webkiosk.login().then((bool loggedIn) {
-      if(loggedIn) {
-        return webkiosk.subGroup().then((Map<String,String> data) => data);
+      if (loggedIn) {
+        return webkiosk.subGroup().then((Map<String, String> data) => data);
       }
       return Future(null);
     });
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
   }
   return Future(null);
 }
 
 Future<Map<Semester, List<Course>>> fetchSemesterInfo(Session session) {
-  if(session == null) {
+  if (session == null) {
     return Future(null);
   }
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   return webkiosk.login().then((bool loggedIn) {
-    if(loggedIn) {
-      return webkiosk.semesters()
-        .then((Map<Semester, List<Course>> semesters) {
-          if(semesters!=null) {
-            return semesters;
-          } else {
-            print("WTF");
-            return semesters;
-          }
-        })
-        .catchError((error) {
-          print("Error: $error");
-        });
+    if (loggedIn) {
+      return webkiosk.semesters().then((Map<Semester, List<Course>> semesters) {
+        if (semesters != null) {
+          return semesters;
+        } else {
+          print("WTF");
+          return semesters;
+        }
+      }).catchError((error) {
+        print("Error: $error");
+      });
     }
   }).catchError((error) {
     print("Error: $error");
@@ -132,36 +141,40 @@ Future<Map<Semester, List<Course>>> fetchSemesterInfo(Session session) {
 }
 
 Future<List<ExamGrade>> fetchExamGrades(Session session) {
-  if(session == null) {
+  if (session == null) {
     return Future(null);
   }
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
     return webkiosk.login().then((bool loggedIn) {
-      if(loggedIn) {
-        return webkiosk.examGrades().then((List<ExamGrade> examGrades) => examGrades);
+      if (loggedIn) {
+        return webkiosk
+            .examGrades()
+            .then((List<ExamGrade> examGrades) => examGrades);
       }
       return Future(null);
     });
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
   }
   return Future(null);
 }
 
 Future<List<ExamMark>> fetchExamMarks(Session session) {
-  if(session == null) {
+  if (session == null) {
     return Future(null);
   }
   WebKiosk webkiosk = WebKiosk(session.username, session.password);
   try {
     return webkiosk.login().then((bool loggedIn) {
-      if(loggedIn) {
-        return webkiosk.examMarks().then((List<ExamMark> examMarks) => examMarks);
+      if (loggedIn) {
+        return webkiosk
+            .examMarks()
+            .then((List<ExamMark> examMarks) => examMarks);
       }
       return Future(null);
     });
-  } catch(ex) {
+  } catch (ex) {
     print(ex.toString());
   }
   return Future(null);

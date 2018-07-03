@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:abstergo_flutter/pages/login/login.dart';
 import 'package:abstergo_flutter/pages/layout/body.dart';
 import 'package:abstergo_flutter/pages/layout/bottom_bar.dart';
@@ -48,16 +48,21 @@ class _OracleApplicationState extends State<OracleApplication>
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel>(
-        converter: _ViewModel.fromStore,
-        builder: (context, vm) {
-          if (!vm.isLoggedIn) {
-            return LoginPage();
-          }
+
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (BuildContext context, AsyncSnapshot<FirebaseUser> user) {
+        if(!user.hasData || user == null ||user.data == null) {
+          return LoginPage();
+        }
+        print(user.data.email);
+        return StoreConnector<AppState, int>(
+        converter: (store) => store.state.pageIndex,
+        builder: (BuildContext context, int pageIndex) {
           return Scaffold(
             appBar: AppBar(
               elevation: 4.0,
-              backgroundColor: colors[vm.pageIndex],
+              backgroundColor: colors[pageIndex],
               centerTitle: true,
               title: Text(title),
               leading: _Refresh(),
@@ -69,23 +74,8 @@ class _OracleApplicationState extends State<OracleApplication>
             bottomNavigationBar: BottomBar(),
           );
         });
-  }
-}
-
-class _ViewModel {
-  final bool isLoggedIn;
-  final int pageIndex;
-
-  _ViewModel({this.isLoggedIn, this.pageIndex});
-
-  static _ViewModel fromStore(Store<AppState> store) {
-    bool isLoggedIn;
-    if (store.state.session == null) {
-      isLoggedIn = false;
-    } else {
-      isLoggedIn = store.state.session.isValid;
-    }
-    return _ViewModel(isLoggedIn: isLoggedIn, pageIndex: store.state.pageIndex);
+      },
+    );
   }
 }
 
