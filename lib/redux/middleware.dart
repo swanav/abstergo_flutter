@@ -2,6 +2,10 @@ import 'dart:async';
 import 'package:redux/redux.dart';
 import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:abstergo_flutter/models/session.dart';
 import 'package:tkiosk/tkiosk.dart';
 
@@ -23,12 +27,15 @@ void networkRequestMiddleware(Store<AppState> store, action, NextDispatcher next
     });
   }
 
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
   switch(action) {
     case PersonalInfoFetchAction:
       store.dispatch(SemesterInfoFetchAction);
       store.dispatch(ExamInfoFetchAction);
       fetchPersonalInfo(store.state.session).then((PersonalInfo profile) {
         store.dispatch(PersonalInfoUpdateAction(profile));
+        Firestore.instance.collection('profile').document(user.uid).setData(profile.toMap());
       }).catchError(errorHandler);
       fetchSubGroupInfo(store.state.session).then((Map data) {
         print(data.length);

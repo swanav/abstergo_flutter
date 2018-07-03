@@ -105,21 +105,25 @@ class _ProfileBodyAddress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+      String address = add.address;
+      address = address.split("\t").map((f) => f.trimLeft()).join("");
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              add.address,
+              address,
+              style: Styles.Profile['body'],
+            ),
+            Text(add.district.isNotEmpty?
+              "${add.district} ${add.city}":"${add.city}",
               style: Styles.Profile['body'],
             ),
             Text(
-              "${add.district} ${add.city}",
-              style: Styles.Profile['body'],
-            ),
-            Text(
-              "${add.state} ${add.pin}",
+              "${add.state}-${add.pin}",
               style: Styles.Profile['body'],
             ),
           ],
