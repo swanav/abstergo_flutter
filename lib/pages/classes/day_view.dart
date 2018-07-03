@@ -28,9 +28,9 @@ class DayView extends StatelessWidget {
               stream: Firestore.instance
                   .collection('schedule')
                   .document(vm.semesterCode)
-                  .getCollection(vm.subGroup)
+                  .collection(vm.subGroup)
                   .document(day)
-                  .snapshots,
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data.data == null) {
                   return Center(child: Text('Loading Time Table...'));
