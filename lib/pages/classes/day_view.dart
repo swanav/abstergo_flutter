@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:abstergo_flutter/models/app_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:abstergo_flutter/models/class_details.dart';
 import 'package:abstergo_flutter/pages/classes/day_view_row.dart';
 import 'package:abstergo_flutter/pages/layout/loading.dart';
 
-class DayView extends StatelessWidget {
+class DayView extends StatefulWidget {
   final String day;
 
   DayView(this.day);
+
+  @override
+  _DayViewState createState() => _DayViewState();
+}
+
+class _DayViewState extends State<DayView> {
+  String semesterCode;
+  String subGroup;
+
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((SharedPreferences pref) {
+      setState(() {
+        this.semesterCode = pref.getString("semesterCode");
+        this.subGroup = pref.getString("subGroup");
+      });
+    });
+  }
 
   List<Widget> dayViewGenerator(classes) {
     List<Widget> days = List();
@@ -22,41 +39,21 @@ class DayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _ViewModel>(
-        converter: _ViewModel.fromStore,
-        builder: (context, vm) {
-          return StreamBuilder(
-              stream: Firestore.instance
-                  .collection('schedule')
-                  .document(vm.semesterCode)
-                  .collection(vm.subGroup)
-                  .document(day)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data.data == null) {
-                  return Loading();
-                }
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection('schedule')
+            .document(this.semesterCode)
+            .collection(this.subGroup)
+            .document(widget.day)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData || snapshot.data.data == null) {
+            return Loading();
+          }
 
-                return ListView(
-                  children: dayViewGenerator(snapshot.data.data['classes']),
-                );
-              });
+          return ListView(
+            children: dayViewGenerator(snapshot.data.data['classes']),
+          );
         });
-  }
-}
-
-class _ViewModel {
-  final String branchCode;
-  final String subGroup;
-  final String semesterCode;
-
-  _ViewModel(
-      {this.branchCode, this.semesterCode, this.subGroup});
-
-  static _ViewModel fromStore(Store<AppState> store) {
-      return _ViewModel(
-        semesterCode: store.state.subGroupData["semesterCode"],
-        subGroup: store.state.subGroupData["subGroup"],
-      );
   }
 }
