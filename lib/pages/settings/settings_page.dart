@@ -23,7 +23,11 @@ class SettingsPage extends StatelessWidget {
               primary: true,
               actions: <Widget>[
                 IconButton(
-                  onPressed: () {vm.dispatcher(context);},
+                  onPressed: () async {
+                    //store.dispatch(LogoutAction);
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context).pop();
+                  },
                   icon: Icon(AppIcons.SETTINGS_LOGOUT),
                   tooltip: "Logout",
                 )
@@ -76,11 +80,7 @@ class _ViewModel {
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
       settings: store.state.settings,
-      dispatcher: (BuildContext context) {
-        store.dispatch(LogoutAction);
-        FirebaseAuth.instance.signOut();
-        Navigator.of(context).pop();
-      },
+      dispatcher: (BuildContext context) {},
     );
   }
 }
