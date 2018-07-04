@@ -5,6 +5,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:abstergo_flutter/models/app_state.dart';
 import 'package:abstergo_flutter/models/class_details.dart';
 import 'package:abstergo_flutter/pages/classes/day_view_row.dart';
+import 'package:abstergo_flutter/pages/layout/loading.dart';
 
 class DayView extends StatelessWidget {
   final String day;
@@ -33,7 +34,7 @@ class DayView extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data.data == null) {
-                  return Center(child: Text('Loading Time Table...'));
+                  return Loading();
                 }
 
                 return ListView(
@@ -53,13 +54,9 @@ class _ViewModel {
       {this.branchCode, this.semesterCode, this.subGroup});
 
   static _ViewModel fromStore(Store<AppState> store) {
-    if (store.state.personalInfo != null) {
       return _ViewModel(
-        branchCode: store.state.personalInfo.branch,
         semesterCode: store.state.subGroupData["semesterCode"],
         subGroup: store.state.subGroupData["subGroup"],
       );
-    }
-    return _ViewModel();
   }
 }
