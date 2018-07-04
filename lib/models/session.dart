@@ -10,4 +10,7 @@ class Session {
         'username': username,
         'password': password,
       };
+
+  @override
+  String toString() => "$username:$password";
 }
