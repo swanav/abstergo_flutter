@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:abstergo_flutter/redux/actions.dart';
-import 'package:abstergo_flutter/models/app_state.dart';
-import 'package:abstergo_flutter/models/session.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:abstergo_flutter/models/credentials.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -38,6 +37,31 @@ class LoginFormState extends State<LoginForm> {
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _attemptLogin() {
+    Credentials credentials = Credentials(
+      _usernameController.text,
+      _passwordController.text,
+    );
+
+    FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: credentials.firebaseEmail,
+      password: credentials.firebasePassword,
+    ).catchError((error) {
+      return FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: credentials.firebaseEmail,
+        password: credentials.firebasePassword,
+      );
+    }).then((FirebaseUser user) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString("rollNumber", credentials.rollNumber);
+      preferences.setString("password", credentials.password);
+      preferences.setString("fb-username", credentials.firebaseEmail);
+      preferences.setString("fb-password", credentials.firebasePassword);
+      preferences.setString("uid", user.uid);
+      preferences.commit();
+    });
   }
 
   @override
@@ -82,45 +106,13 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             Center(
-                child: StoreConnector<AppState, _ViewModel>(
-              converter: _ViewModel.fromStore,
-              builder: (context, vm) {
-                return FlatButton(
-                  onPressed: () {
-                    vm.dispatcher(
-                      _usernameController.text,
-                      _passwordController.text,
-                    );
-                  },
-                  child: Text('Submit'),
-                );
-              },
+                child: FlatButton(
+              onPressed: _attemptLogin,
+              child: Text('Submit'),
             )),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ViewModel {
-  final dynamic dispatcher;
-  final dynamic listener;
-
-  _ViewModel({this.dispatcher, this.listener});
-
-  static _ViewModel fromStore(Store<AppState> store) {
-    return _ViewModel(
-      dispatcher: (String username, String password) {
-        store.dispatch(
-          LoginAction(
-            Session(
-              username: username,
-              password: password,
-            ),
-          ),
-        );
-      },
     );
   }
 }

@@ -1,5 +1,11 @@
 class Credentials {
-  String username;
+  
+  String rollNumber;
   String password;
-  Credentials(this.username, this.password);
+
+  Credentials(this.rollNumber, this.password);
+
+  String get firebaseEmail => "$rollNumber@thapar.abstergo.me";
+  String get firebasePassword => "$password@tu123";
+
 }
