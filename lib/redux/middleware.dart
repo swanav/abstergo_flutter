@@ -5,6 +5,7 @@ import 'package:abstergo_flutter/models/app_state.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:abstergo_flutter/models/session.dart';
 import 'package:tkiosk/tkiosk.dart';
@@ -21,14 +22,24 @@ void networkRequestMiddleware(
       if (loginStatus) {
         store.dispatch(LoginSuccessAction);
         Session session = action.session;
-        FirebaseAuth.instance.signInWithEmailAndPassword(
+        FirebaseAuth.instance
+            .signInWithEmailAndPassword(
           email: "${session.username}@thapar.abstergo.me",
           password: "${session.password}@tu123",
-        ).catchError((error) {
-          FirebaseAuth.instance.createUserWithEmailAndPassword(
+        )
+            .catchError((error) {
+          return FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: "${session.username}@thapar.abstergo.me",
             password: "${session.password}@tu123",
           );
+        }).then((FirebaseUser user) async {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.setString("rollNumber", session.username);
+          preferences.setString("password", session.password);
+          preferences.setString("fb-username", user.email);
+          preferences.setString("fb-password", "${session.password}@tu123");
+          preferences.setString("uid", user.uid);
+          preferences.commit();
         });
       } else {
         store.dispatch(LoginFailedAction);
@@ -37,31 +48,36 @@ void networkRequestMiddleware(
   }
 
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  Session session = Session(
+    username: preferences.getString("rollNumber"),
+    password: preferences.getString("password"),
+  );
+  print(session);
   switch (action) {
     case PersonalInfoFetchAction:
       store.dispatch(SemesterInfoFetchAction);
       store.dispatch(ExamInfoFetchAction);
-      fetchPersonalInfo(store.state.session).then((PersonalInfo profile) {
-        Firestore.instance
-            .collection('profile')
-            .document(user.uid)
-            .setData(profile.toMap());
-      }).catchError(errorHandler);
-      fetchSubGroupInfo(store.state.session).then((Map data) {
+      // fetchPersonalInfo(session).then((PersonalInfo profile) {
+      //   Firestore.instance
+      //       .collection('profile')
+      //       .document(user.uid)
+      //       .setData(profile.toMap());
+      // }).catchError(errorHandler);
+      fetchSubGroupInfo(session).then((Map data) {
         store.dispatch(SubGroupUpdateAction(data));
       }).catchError(errorHandler);
       break;
     case ExamInfoFetchAction:
-      fetchExamGrades(store.state.session).then((List<ExamGrade> examGrades) {
+      fetchExamGrades(session).then((List<ExamGrade> examGrades) {
         store.dispatch(ExamGradesUpdateAction(examGrades));
       }).catchError(errorHandler);
-      fetchExamMarks(store.state.session).then((List<ExamMark> examMarks) {
+      fetchExamMarks(session).then((List<ExamMark> examMarks) {
         store.dispatch(ExamMarksUpdateAction(examMarks));
       }).catchError(errorHandler);
       break;
     case SemesterInfoFetchAction:
-      fetchSemesterInfo(store.state.session)
+      fetchSemesterInfo(session)
           .then((Map<Semester, List<Course>> semesters) {
         store.dispatch(SemesterInfoUpdateAction(semesters));
       }).catchError(errorHandler);
