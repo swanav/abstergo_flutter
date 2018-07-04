@@ -12,21 +12,19 @@ import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/res/icons.dart';
 
 class OracleApplication extends StatefulWidget {
-  final Store<AppState> store;
   final String title;
 
-  OracleApplication({this.store, this.title});
+  OracleApplication({this.title});
 
   @override
-  createState() => _OracleApplicationState(store: store, title: title);
+  createState() => _OracleApplicationState();
 }
 
 class _OracleApplicationState extends State<OracleApplication>
     with WidgetsBindingObserver {
-  final Store<AppState> store;
-  final String title;
+  int pageIndex;
 
-  _OracleApplicationState({this.store, this.title});
+  _OracleApplicationState({this.pageIndex = 1});
 
   @override
   void initState() {
@@ -46,34 +44,40 @@ class _OracleApplicationState extends State<OracleApplication>
     super.dispose();
   }
 
+  void pageChanger(int newIndex) {
+    print(pageIndex);
+    if (this.pageIndex != newIndex) {
+      setState(() {
+        this.pageIndex = newIndex;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<FirebaseUser> user) {
-        if(!user.hasData || user == null ||user.data == null) {
+        if (!user.hasData) {
           return LoginPage();
         }
-        print(user.data.email);
-        return StoreConnector<AppState, int>(
-        converter: (store) => store.state.pageIndex,
-        builder: (BuildContext context, int pageIndex) {
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 4.0,
-              backgroundColor: colors[pageIndex],
-              centerTitle: true,
-              title: Text(title),
-              leading: _Refresh(),
-              actions: <Widget>[
-                _Gear(),
-              ],
-            ),
-            body: Body(),
-            bottomNavigationBar: BottomBar(),
-          );
-        });
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 4.0,
+            backgroundColor: colors[pageIndex],
+            centerTitle: true,
+            title: Text(widget.title),
+            leading: _Refresh(),
+            actions: <Widget>[
+              _Gear(),
+            ],
+          ),
+          body: Body(pageIndex: pageIndex),
+          bottomNavigationBar: BottomBar(
+            currentIndex: pageIndex,
+            touchHandler: pageChanger,
+          ),
+        );
       },
     );
   }
@@ -81,23 +85,16 @@ class _OracleApplicationState extends State<OracleApplication>
 
 class _Gear extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => StoreConnector<AppState, VoidCallback>(
-        converter: (Store<AppState> store) {
-          return () {
-            Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SettingsPage(),
-                  ),
-                );
-          };
+  Widget build(BuildContext context) => IconButton(
+        onPressed: () {
+          Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => SettingsPage(),
+                ),
+              );
         },
-        builder: (context, callback) {
-          return IconButton(
-            onPressed: callback,
-            color: Colors.white,
-            icon: Icon(AppIcons.SETTINGS),
-          );
-        },
+        color: Colors.white,
+        icon: Icon(AppIcons.SETTINGS),
       );
 }
 
@@ -106,7 +103,7 @@ class _Refresh extends StatelessWidget {
   Widget build(BuildContext context) => StoreConnector<AppState, VoidCallback>(
         converter: (Store<AppState> store) {
           return () {
-            return store.dispatch(PersonalInfoFetchAction);
+            return store.dispatch(SemesterInfoFetchAction);
           };
         },
         builder: (context, callback) {
