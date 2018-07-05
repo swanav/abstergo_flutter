@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:abstergo_flutter/pages/layout/loading.dart';
 import 'package:abstergo_flutter/pages/profile/profile_content.dart';
+import 'package:abstergo_flutter/services/fetch_profile.dart';
 import 'package:tkiosk/tkiosk.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -36,13 +38,21 @@ class _ProfilePageState extends State<ProfilePage> {
             .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.data == null) {
+          if (!snapshot.hasData) {
             return Loading();
           }
-          return Container(
-            child: ProfileContent(
-              PersonalInfo.fromMap(snapshot.data.data),
-            ),
+          if (!snapshot.data.exists) {
+            fetchPersonalInfo();
+            fetchSubGroupInfo();
+            return Center(
+              child: Text(
+                "Profile details unavailable.\nTrying to fetch from the server.",
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+          return ProfileContent(
+            PersonalInfo.fromMap(snapshot.data.data),
           );
         });
   }
