@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:abstergo_flutter/pages/login/login.dart';
 import 'package:abstergo_flutter/pages/layout/body.dart';
 import 'package:abstergo_flutter/pages/layout/bottom_bar.dart';
 import 'package:abstergo_flutter/pages/layout/colors.dart';
 import 'package:abstergo_flutter/pages/settings/settings_page.dart';
-import 'package:abstergo_flutter/models/app_state.dart';
-import 'package:abstergo_flutter/redux/actions.dart';
 import 'package:abstergo_flutter/res/icons.dart';
+import 'package:abstergo_flutter/services/fetch_semester_info.dart';
+import 'package:abstergo_flutter/services/fetch_exam_grades.dart';
+import 'package:abstergo_flutter/services/fetch_exam_marks.dart';
 
 class OracleApplication extends StatefulWidget {
   final String title;
@@ -66,7 +66,10 @@ class _OracleApplicationState extends State<OracleApplication>
             elevation: 4.0,
             backgroundColor: colors[pageIndex],
             centerTitle: true,
-            title: Text(widget.title),
+            title: Text(
+              widget.title,
+              style: TextStyle(fontFamily: 'ProductSans'),
+            ),
             leading: _Refresh(),
             actions: <Widget>[
               _Gear(),
@@ -100,18 +103,14 @@ class _Gear extends StatelessWidget {
 
 class _Refresh extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => StoreConnector<AppState, VoidCallback>(
-        converter: (Store<AppState> store) {
-          return () {
-            return store.dispatch(SemesterInfoFetchAction);
-          };
+  Widget build(BuildContext context) => IconButton(
+        onPressed: () {
+          print("Fetch... ");
+          fetchSemesterInfo();
+          fetchExamMarks();
+          fetchExamGrades();
         },
-        builder: (context, callback) {
-          return IconButton(
-            onPressed: callback,
-            color: Colors.white,
-            icon: Icon(AppIcons.APP_REFRESH),
-          );
-        },
+        color: Colors.white,
+        icon: Icon(AppIcons.APP_REFRESH),
       );
 }
