@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:tkiosk/tkiosk.dart';
 import 'package:abstergo_flutter/models/credentials.dart';
+import 'package:abstergo_flutter/models/webkiosk_exception.dart';
 
 class LoginPage extends StatefulWidget {
   @override
-  createState() => new LoginPageState();
+  createState() => LoginPageState();
 }
 
 class LoginPageState extends State<LoginPage> {
@@ -44,24 +47,64 @@ class LoginFormState extends State<LoginForm> {
       _usernameController.text,
       _passwordController.text,
     );
+    print("Attempting login for ${credentials.rollNumber}");
+    _webkioskLogin(credentials)
+        .then(_firebaseLogin)
+        .then(_saveCredentials)
+        .catchError(_webkioskExceptionHandler, test: (ex) => ex is WebkioskException);
+  }
 
-    FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future<Credentials> _webkioskLogin(Credentials credentials) {
+    WebKiosk webkiosk = WebKiosk(credentials.rollNumber, credentials.password);
+    return webkiosk.login().then((bool isLoggedIn) {
+      if (!isLoggedIn) {
+        print("Login Failed");
+        throw WebkioskException(
+            "Webkiosk authentication failed. Incorrect credentials or the server may not be responding.");
+      }
+      credentials.isWebkioskAuthenticated = isLoggedIn;
+      return credentials;
+    }).catchError((ex) {
+      throw ex;
+    });
+  }
+
+  void _webkioskExceptionHandler(ex) {
+    Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                (ex as WebkioskException).message.split(". ").join(".\n"),
+                textAlign: TextAlign.center),
+            duration: Duration(seconds: 5),
+          ),
+        );
+  }
+
+  Future<Credentials> _firebaseLogin(Credentials credentials) {
+    return FirebaseAuth.instance
+        .signInWithEmailAndPassword(
       email: credentials.firebaseEmail,
       password: credentials.firebasePassword,
-    ).catchError((error) {
+    )
+        .catchError((error) {
       return FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: credentials.firebaseEmail,
         password: credentials.firebasePassword,
       );
     }).then((FirebaseUser user) async {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setString("rollNumber", credentials.rollNumber);
-      preferences.setString("password", credentials.password);
-      preferences.setString("fb-username", credentials.firebaseEmail);
-      preferences.setString("fb-password", credentials.firebasePassword);
-      preferences.setString("uid", user.uid);
-      preferences.commit();
+      credentials.uid = user.uid;
+      return credentials;
     });
+  }
+
+  Future<bool> _saveCredentials(Credentials credentials) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("rollNumber", credentials.rollNumber);
+    preferences.setString("password", credentials.password);
+    preferences.setString("fb-username", credentials.firebaseEmail);
+    preferences.setString("fb-password", credentials.firebasePassword);
+    preferences.setString("uid", credentials.firebaseId);
+    return await preferences.commit();
   }
 
   @override
@@ -90,8 +133,7 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
               child: TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -106,8 +148,9 @@ class LoginFormState extends State<LoginForm> {
               ),
             ),
             Center(
-                child: FlatButton(
+                child: RaisedButton(
               onPressed: _attemptLogin,
+              color: Colors.deepPurple,
               child: Text('Submit'),
             )),
           ],
