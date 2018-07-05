@@ -182,11 +182,11 @@ class _SemesterPageState extends State<SemesterPage>
                         ExamGrade grade;
                         List<ExamMark> marks;
                         if (widget.marks != null) {
-                          marks = widget.marks?.where((mark) => mark.subjectCode == course.code)?.toList();
+                          marks = widget.marks?.where((mark) => mark.subjectCode == course.subjectCode)?.toList();
                         }
                         if (widget.grades != null) {
                           try {
-                            grade = widget.grades?.firstWhere((grade) => grade.subjectCode == course.code);
+                            grade = widget.grades?.firstWhere((grade) => grade.subjectCode == course.subjectCode);
                           } catch (e) {
                             grade = null;
                           }

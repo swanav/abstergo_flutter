@@ -22,18 +22,18 @@ class CourseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Hero(
-                    tag: "${course.code}_code",
-                    child: _CourseCode(course.code),
+                    tag: "${course.subjectCode}_code",
+                    child: _CourseCode(course.subjectCode),
                   ),
                   Hero(
-                    tag: "name${course.code}_name",
-                    child: _CourseName(course.name),
+                    tag: "name${course.subjectCode}_name",
+                    child: _CourseName(course.subjectName),
                   ),
                 ],
               ),
             ),
             Hero(
-              tag: "${course.code}_grade",
+              tag: "${course.subjectCode}_grade",
               child: Grade(grade),
             ),
           ],

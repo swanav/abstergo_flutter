@@ -51,7 +51,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
     return new Stack(
       children: <Widget>[
         new Hero(
-          tag: widget.course.code + "_background",
+          tag: widget.course.subjectCode + "_background",
           child: new Container(
             decoration: new BoxDecoration(
               color: Colors.white,
@@ -75,7 +75,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
             ),
             actions: <Widget>[
               new Hero(
-                tag: widget.course.code + "_more_vert",
+                tag: widget.course.subjectCode + "_more_vert",
                 child: new Material(
                   color: Colors.transparent,
                   type: MaterialType.transparency,
@@ -101,7 +101,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
-                      tag: widget.course.code + "_grade",
+                      tag: widget.course.subjectCode + "_grade",
                       child: Grade(widget.grade),
                     ),
                   ),
@@ -111,7 +111,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                   child: new Align(
                     alignment: Alignment.bottomRight,
                     child: new Hero(
-                      tag: widget.course.code + "_credits",
+                      tag: widget.course.subjectCode + "_credits",
                       child: new Material(
                         color: Colors.transparent,
                         child: new Text(
@@ -127,8 +127,8 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
-                      tag: widget.course.code + "_code",
-                      child: _CourseCode(widget.course.code),
+                      tag: widget.course.subjectCode + "_code",
+                      child: _CourseCode(widget.course.subjectCode),
                     ),
                   ),
                 ),
@@ -137,8 +137,8 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
-                      tag: widget.course.code + "_name",
-                      child: _CourseName(widget.course.name),
+                      tag: widget.course.subjectCode + "_name",
+                      child: _CourseName(widget.course.subjectName),
                     ),
                   ),
                 ),
@@ -147,7 +147,7 @@ class _CoursePageState extends State<CoursePage> with TickerProviderStateMixin {
                   child: new Align(
                     alignment: Alignment.bottomLeft,
                     child: new Hero(
-                      tag: widget.course.code + "_progress_bar",
+                      tag: widget.course.subjectCode + "_progress_bar",
                       child: new Material(
                         color: Colors.transparent,
                         child: new Row(
