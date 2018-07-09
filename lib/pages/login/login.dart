@@ -51,22 +51,24 @@ class LoginFormState extends State<LoginForm> {
     _webkioskLogin(credentials)
         .then(_firebaseLogin)
         .then(_saveCredentials)
-        .catchError(_webkioskExceptionHandler, test: (ex) => ex is WebkioskException);
+        .catchError(_webkioskExceptionHandler,
+            test: (ex) => ex is WebkioskException);
   }
 
-  Future<Credentials> _webkioskLogin(Credentials credentials) {
+  Future<Credentials> _webkioskLogin(Credentials credentials) async {
     WebKiosk webkiosk = WebKiosk(credentials.rollNumber, credentials.password);
-    return webkiosk.login().then((bool isLoggedIn) {
-      if (!isLoggedIn) {
+    try {
+      if (await webkiosk.login()) {
         print("Login Failed");
         throw WebkioskException(
             "Webkiosk authentication failed. Incorrect credentials or the server may not be responding.");
       }
-      credentials.isWebkioskAuthenticated = isLoggedIn;
-      return credentials;
-    }).catchError((ex) {
-      throw ex;
-    });
+    } on WebkioskException catch (ex) {
+      throw (ex);
+    } catch (ex) {
+      print(ex);
+    }
+    return credentials;
   }
 
   void _webkioskExceptionHandler(ex) {
