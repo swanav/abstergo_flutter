@@ -10,6 +10,7 @@ import 'package:abstergo_flutter/res/icons.dart';
 import 'package:abstergo_flutter/services/fetch_semester_info.dart';
 import 'package:abstergo_flutter/services/fetch_exam_grades.dart';
 import 'package:abstergo_flutter/services/fetch_exam_marks.dart';
+import 'package:abstergo_flutter/services/fetch_profile.dart';
 
 class OracleApplication extends StatefulWidget {
   final String title;
@@ -109,6 +110,7 @@ class _Refresh extends StatelessWidget {
           fetchSemesterInfo();
           fetchExamMarks();
           fetchExamGrades();
+          fetchSubGroupInfo();
         },
         color: Colors.white,
         icon: Icon(AppIcons.APP_REFRESH),
