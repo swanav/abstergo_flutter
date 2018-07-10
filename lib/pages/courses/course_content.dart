@@ -6,6 +6,7 @@ import 'package:abstergo_flutter/pages/courses/semester_page.dart';
 import 'package:abstergo_flutter/pages/courses/semester_card.dart';
 import 'package:abstergo_flutter/pages/layout/loading.dart';
 import 'package:abstergo_flutter/animations/custom_scroll_physics.dart';
+import 'package:abstergo_flutter/services/calculator.dart';
 
 class ColorChoices {
   static const List<Color> colors = [
@@ -113,7 +114,7 @@ class _CourseContentState extends State<CourseContent> {
                                       padding: EdgeInsets.only(right: 24.0),
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        "${(widget.cgpa==null?0.0:widget.cgpa)}",
+                                        "${(widget.cgpa.toStringAsPrecision(3))}",
                                         style: TextStyle(
                                             fontFamily: 'ProductSans',
                                             fontSize: 32.0),
@@ -138,7 +139,10 @@ class _CourseContentState extends State<CourseContent> {
                         String examCode =
                             widget.semesters.elementAt(index)['code'];
                         num sgpa = widget.semesters.elementAt(index)['sgpa'];
-                        sgpa == null ? sgpa = 0.0 : sgpa;
+                        if (sgpa == null) {
+                          sgpa = 0.0;
+                          calculateSgpa(examCode);
+                        }
 
                         return Padding(
                           padding: padding,
