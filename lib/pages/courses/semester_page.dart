@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
 
-import 'package:abstergo_flutter/pages/semester/course_item.dart';
+import 'package:abstergo_flutter/pages/courses/course_list.dart';
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 import 'package:abstergo_flutter/res/icons.dart';
 
@@ -9,14 +9,13 @@ class SemesterPage extends StatefulWidget {
   final String examCode;
   final List<Course> courses;
   final List<ExamGrade> grades;
-  final List<ExamMark> marks;
   final num sgpa;
 
   SemesterPage(
-      {this.examCode, this.marks, this.grades, this.courses, this.sgpa});
+      {this.examCode, this.grades, this.courses, this.sgpa});
 
   @override
-  _SemesterPageState createState() => new _SemesterPageState();
+  _SemesterPageState createState() => _SemesterPageState();
 }
 
 class _SemesterPageState extends State<SemesterPage>
@@ -25,50 +24,43 @@ class _SemesterPageState extends State<SemesterPage>
   AnimationController animationBar;
   double barPercent = 0.0;
   Tween<double> animT;
-  AnimationController scaleAnimation;
 
   @override
   void initState() {
-    scaleAnimation = new AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 750),
-        lowerBound: 0.0,
-        upperBound: 1.0);
 
     percentComplete = (widget.sgpa.isNaN? 0 : widget.sgpa)/ 10;
     barPercent = percentComplete;
-    animationBar = new AnimationController(
+    animationBar = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100))
       ..addListener(() {
         setState(() {
           barPercent = animT.lerp(animationBar.value);
         });
       });
-    animT = new Tween<double>(begin: percentComplete, end: percentComplete);
-    scaleAnimation.forward();
+    animT = Tween<double>(begin: percentComplete, end: percentComplete);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Stack(
+    return Stack(
       children: <Widget>[
-        new Hero(
+        Hero(
           tag: widget.examCode + "_background",
-          child: new Container(
-            decoration: new BoxDecoration(
+          child: Container(
+            decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: new BorderRadius.circular(0.0),
+              borderRadius: BorderRadius.circular(0.0),
             ),
           ),
         ),
-        new Scaffold(
+        Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: new AppBar(
+          appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            leading: new IconButton(
-              icon: new Icon(
+            leading: IconButton(
+              icon: Icon(
                 AppIcons.NAV_BACK,
                 color: Colors.grey,
               ),
@@ -77,13 +69,13 @@ class _SemesterPageState extends State<SemesterPage>
               },
             ),
             actions: <Widget>[
-              new Hero(
+              Hero(
                 tag: widget.examCode + "_more_vert",
-                child: new Material(
+                child: Material(
                   color: Colors.transparent,
                   type: MaterialType.transparency,
-                  child: new IconButton(
-                    icon: new Icon(
+                  child: IconButton(
+                    icon: Icon(
                       AppIcons.NAV_MORE,
                       color: Colors.grey,
                     ),
@@ -99,67 +91,67 @@ class _SemesterPageState extends State<SemesterPage>
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.only(bottom: 30.0),
-                  child: new Align(
+                  child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: new Hero(
+                    child: Hero(
                       tag: widget.examCode + "_icon",
                       child: SGPA(widget.sgpa),
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
-                  child: new Align(
+                  child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: new Hero(
+                    child: Hero(
                       tag: widget.examCode + "_number_of_tasks",
-                      child: new Material(
+                      child: Material(
                         color: Colors.transparent,
-                        child: new Text(
+                        child: Text(
                           "Semester",
-                          style: new TextStyle(),
+                          style: TextStyle(),
                         ),
                       ),
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
-                  child: new Align(
+                  child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: new Hero(
+                    child: Hero(
                       tag: widget.examCode + "_title",
-                      child: new Material(
+                      child: Material(
                         color: Colors.transparent,
-                        child: new Text(
+                        child: Text(
                           widget.examCode,
-                          style: new TextStyle(fontSize: 30.0),
+                          style: TextStyle(fontSize: 30.0),
                         ),
                       ),
                     ),
                   ),
                 ),
-                new Padding(
+                Padding(
                   padding: const EdgeInsets.only(bottom: 30.0),
-                  child: new Align(
+                  child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: new Hero(
+                    child: Hero(
                       tag: widget.examCode + "_progress_bar",
-                      child: new Material(
+                      child: Material(
                         color: Colors.transparent,
-                        child: new Row(
+                        child: Row(
                           children: <Widget>[
-                            new Expanded(
-                              child: new LinearProgressIndicator(
+                            Expanded(
+                              child: LinearProgressIndicator(
                                 value: barPercent,
                                 backgroundColor: Colors.grey.withAlpha(50),
-                                valueColor: new AlwaysStoppedAnimation<Color>(
+                                valueColor: AlwaysStoppedAnimation<Color>(
                                     Colors.cyan),
                               ),
                             ),
-                            new Padding(
+                            Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: Text(
                                   (widget.sgpa.isNaN ? 0 : widget.sgpa * 10)
@@ -172,35 +164,7 @@ class _SemesterPageState extends State<SemesterPage>
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ScaleTransition(
-                    scale: scaleAnimation,
-                    child: new ListView.builder(
-                      padding: const EdgeInsets.all(0.0),
-                      itemBuilder: (BuildContext context, int index) {
-                        Course course = widget.courses[index];
-                        ExamGrade grade;
-                        List<ExamMark> marks;
-                        if (widget.marks != null) {
-                          marks = widget.marks?.where((mark) => mark.subjectCode == course.subjectCode)?.toList();
-                        }
-                        if (widget.grades != null) {
-                          try {
-                            grade = widget.grades?.firstWhere((grade) => grade.subjectCode == course.subjectCode);
-                          } catch (e) {
-                            grade = null;
-                          }
-                        }
-                        return new CourseItem(
-                          course: course,
-                          grade: grade,
-                          marks: marks,
-                        );
-                      },
-                      itemCount: widget.courses?.length,
-                    ),
-                  ),
-                ),
+                CourseList(examCode: widget.examCode),
               ],
             ),
           ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/semester/course_page.dart';
+import 'package:abstergo_flutter/pages/courses/course_page.dart';
 import 'package:abstergo_flutter/pages/layout/grade.dart';
 
 class CourseItem extends StatelessWidget {
-  CourseItem({@required this.course, this.grade, this.marks});
+  CourseItem({@required this.examCode, @required this.course, this.grade});
 
+  final String examCode;
   final Course course;
   final ExamGrade grade;
-  final List<ExamMark> marks;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,8 @@ class CourseItem extends StatelessWidget {
         Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => CoursePage(
+                      examCode: examCode,
                       course: course,
-                      marks: marks,
                       grade: grade,
                     ),
               ),
@@ -66,10 +66,7 @@ class _CourseCode extends StatelessWidget {
       child: Text(
         courseCode,
         style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 20.0,
-          color: Colors.black
-        ),
+            fontWeight: FontWeight.w400, fontSize: 20.0, color: Colors.black),
       ),
     );
   }

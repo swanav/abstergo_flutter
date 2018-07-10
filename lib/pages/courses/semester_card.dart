@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tkiosk/tkiosk.dart';
 
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 import 'package:abstergo_flutter/res/icons.dart';
 
 class SemesterCard extends StatelessWidget {
   final String examCode;
-  final List<Course> courses;
-  final List<ExamMark> examMarks;
-  final List<ExamGrade> examGrades;
   final double sgpa;
 
   SemesterCard({
     this.examCode,
-    this.examGrades,
-    this.examMarks,
-    this.courses,
     this.sgpa,
   });
 

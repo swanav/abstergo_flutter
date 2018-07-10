@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:tkiosk/tkiosk.dart';
-import 'package:abstergo_flutter/pages/semester/semester_page.dart';
+
+import 'package:abstergo_flutter/pages/courses/semester_page.dart';
 import 'package:abstergo_flutter/pages/courses/semester_card.dart';
+import 'package:abstergo_flutter/pages/layout/loading.dart';
 import 'package:abstergo_flutter/animations/custom_scroll_physics.dart';
 
 class ColorChoices {
@@ -20,20 +21,16 @@ class ColorChoices {
 }
 
 class CourseContent extends StatefulWidget {
-  final List<ExamMark> examMarks;
-  final List<ExamGrade> examGrades;
-  final Map<Semester, List<Course>> semesters;
-  final Map<String, num> gradePoints;
+  final List<Map> semesters;
+  final double cgpa;
 
-  CourseContent(
-      {this.examGrades, this.examMarks, this.semesters, this.gradePoints});
+  CourseContent({this.semesters, this.cgpa});
 
   @override
   _CourseContentState createState() => _CourseContentState();
 }
 
 class _CourseContentState extends State<CourseContent> {
-
   ScrollController scrollController;
   Color backgroundColor;
   Tween<Color> colorTween;
@@ -53,7 +50,8 @@ class _CourseContentState extends State<CourseContent> {
       int page = position.pixels ~/
           (position.maxScrollExtent / (widget.semesters.length.toDouble() - 1));
       double pageDo = (position.pixels /
-          (position.maxScrollExtent / (widget.semesters.length.toDouble() - 1)));
+          (position.maxScrollExtent /
+              (widget.semesters.length.toDouble() - 1)));
       double percent = pageDo - page;
       if (direction == ScrollDirection.reverse) {
         //page begin
@@ -84,11 +82,7 @@ class _CourseContentState extends State<CourseContent> {
   @override
   Widget build(BuildContext context) {
     if (widget.semesters == null) {
-      return Container(
-        child: Center(
-          child: Text("Courses"),
-        ),
-      );
+      return Loading();
     }
 
     final double _width = MediaQuery.of(context).size.width;
@@ -100,40 +94,61 @@ class _CourseContentState extends State<CourseContent> {
           children: <Widget>[
             Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            height: 150.0,
+                            child: Card(
+                              margin: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.only(right: 24.0),
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        "${(widget.cgpa==null?0.0:widget.cgpa)}",
+                                        style: TextStyle(
+                                            fontFamily: 'ProductSans',
+                                            fontSize: 32.0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     height: 350.0,
                     width: _width,
-                    child: new ListView.builder(
+                    child: ListView.builder(
                       itemBuilder: (context, index) {
                         EdgeInsets padding = const EdgeInsets.only(
                             left: 10.0, right: 10.0, top: 20.0, bottom: 30.0);
-                        String examCode = widget.semesters.keys.elementAt(index).code;
+                        String examCode =
+                            widget.semesters.elementAt(index)['code'];
+                        num sgpa = widget.semesters.elementAt(index)['sgpa'];
+                        sgpa == null ? sgpa = 0.0 : sgpa;
 
-                        List<ExamGrade> grades = widget.examGrades
-                            ?.where((grade) => grade.examCode == examCode)
-                            ?.toList();
-                        List<ExamMark> marks = widget.examMarks
-                            ?.where((mark) => mark.examCode == examCode)
-                            ?.toList();
-                        List<Course> courses =
-                            widget.semesters[widget.semesters.keys.elementAt(index)];
-                        num sgpa = widget.gradePoints[examCode];
-                        
-                        return new Padding(
+                        return Padding(
                           padding: padding,
-                          child: new InkWell(
+                          child: InkWell(
                             onTap: () {
-                              Navigator.of(context).push(new PageRouteBuilder(
+                              Navigator.of(context).push(PageRouteBuilder(
                                   pageBuilder: (context, animation,
                                           secondaryAnimation) =>
                                       SemesterPage(
                                         examCode: examCode,
-                                        courses: courses,
-                                        marks: widget.examMarks,
-                                        grades: widget.examGrades,
                                         sgpa: sgpa,
                                       ),
                                   transitionsBuilder: (
@@ -142,13 +157,13 @@ class _CourseContentState extends State<CourseContent> {
                                     secondaryAnimation,
                                     Widget child,
                                   ) {
-                                    return new SlideTransition(
-                                      position: new Tween<Offset>(
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
                                         begin: const Offset(0.0, 1.0),
                                         end: Offset.zero,
                                       ).animate(animation),
-                                      child: new SlideTransition(
-                                        position: new Tween<Offset>(
+                                      child: SlideTransition(
+                                        position: Tween<Offset>(
                                           begin: Offset.zero,
                                           end: const Offset(0.0, 1.0),
                                         ).animate(secondaryAnimation),
@@ -161,9 +176,6 @@ class _CourseContentState extends State<CourseContent> {
                             },
                             child: SemesterCard(
                               examCode: examCode,
-                              examGrades: grades,
-                              examMarks: marks,
-                              courses: courses,
                               sgpa: sgpa,
                             ),
                           ),
@@ -171,7 +183,8 @@ class _CourseContentState extends State<CourseContent> {
                       },
                       padding: const EdgeInsets.only(left: 40.0, right: 40.0),
                       scrollDirection: Axis.horizontal,
-                      physics: new CustomScrollPhysics(numOfItems: widget.semesters.length.toDouble() -1),
+                      physics: CustomScrollPhysics(
+                          numOfItems: widget.semesters.length.toDouble() - 1),
                       controller: scrollController,
                       itemExtent: _width - 80,
                       itemCount: widget.semesters.length,
