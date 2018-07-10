@@ -9,6 +9,7 @@ class Abstergo extends StatelessWidget {
   final theme = ThemeData(
     primaryColor: Colors.blue,
     accentColor: Colors.amber,
+    fontFamily: 'Titillium'
   );
 
   @override
