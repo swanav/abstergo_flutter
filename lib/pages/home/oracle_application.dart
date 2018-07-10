@@ -46,7 +46,6 @@ class _OracleApplicationState extends State<OracleApplication>
   }
 
   void pageChanger(int newIndex) {
-    print(pageIndex);
     if (this.pageIndex != newIndex) {
       setState(() {
         this.pageIndex = newIndex;
