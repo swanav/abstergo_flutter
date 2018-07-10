@@ -27,6 +27,8 @@ flutter:
    - assets/ic_launcher.png
    - assets/ic_launcher_round.png
    - assets/ic_launcher_back.png
+   - assets/login_background.png
+   - assets/background.png
    
   fonts:
     - family: ProductSans
@@ -43,3 +45,12 @@ flutter:
           weight: 300
         - asset: fonts/Comfortaa-Bold.ttf
           weight: 700
+    - family: Titillium
+      fonts:
+        - asset: fonts/TitilliumWeb-Regular.ttf
+        - asset: fonts/TitilliumWeb-Light.ttf
+          weight: 300
+        - asset: fonts/TitilliumWeb-Bold.ttf
+          weight: 700
+        - asset: fonts/TitilliumWeb-Italic.ttf
+          style: italic
