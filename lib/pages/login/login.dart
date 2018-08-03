@@ -9,6 +9,11 @@ import 'package:abstergo_flutter/models/credentials.dart';
 import 'package:abstergo_flutter/models/webkiosk_exception.dart';
 import 'package:abstergo_flutter/pages/layout/loading.dart';
 
+import 'package:abstergo_flutter/services/fetch_exam_grades.dart';
+import 'package:abstergo_flutter/services/fetch_exam_marks.dart';
+import 'package:abstergo_flutter/services/fetch_semester_info.dart';
+import 'package:abstergo_flutter/services/fetch_profile.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   createState() => LoginPageState();
@@ -40,6 +45,7 @@ class LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool loading = false;
+  bool caching = false;
 
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -66,10 +72,12 @@ class LoginFormState extends State<LoginForm> {
         .catchError(_webkioskExceptionHandler,
             test: (ex) => ex is WebkioskException)
         .whenComplete(() {
-      setState(() {
-        loading = false;
-      });
-    });
+          fetchPersonalInfo();
+          fetchSubGroupInfo();
+          fetchSemesterInfo();
+          fetchExamMarks();
+          fetchExamGrades();
+        });
   }
 
   Future<Credentials> _webkioskLogin(Credentials credentials) async {
@@ -89,6 +97,10 @@ class LoginFormState extends State<LoginForm> {
   }
 
   void _webkioskExceptionHandler(ex) {
+    setState(() {
+      loading = false;
+      caching = true;
+    });
     Scaffold.of(context).showSnackBar(
           SnackBar(
             content: Text(

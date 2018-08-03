@@ -23,11 +23,9 @@ class DayViewRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
       child: Card(
         elevation: 4.0,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[

@@ -4,6 +4,7 @@ import 'package:tkiosk/tkiosk.dart';
 import 'package:abstergo_flutter/pages/courses/course_list.dart';
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 import 'package:abstergo_flutter/res/icons.dart';
+import 'package:abstergo_flutter/services/calculator.dart';
 
 class SemesterPage extends StatefulWidget {
   final String examCode;
@@ -74,13 +75,21 @@ class _SemesterPageState extends State<SemesterPage>
                 child: Material(
                   color: Colors.transparent,
                   type: MaterialType.transparency,
-                  child: IconButton(
-                    icon: Icon(
-                      AppIcons.NAV_MORE,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () {},
-                  ),
+                  child: PopupMenuButton(
+                                icon: Icon(
+                                  AppIcons.NAV_MORE,
+                                  color: Colors.grey,
+                                ),
+                                itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'Recalculate',
+                                        child: const Text('Recalculate'),
+                                      ),
+                                    ],
+                                onSelected: (string) {
+                                  calculateSgpa(widget.examCode);
+                                },
+                              ),
                 ),
               )
             ],

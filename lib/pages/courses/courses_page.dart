@@ -64,6 +64,7 @@ class _CoursesPageState extends State<CoursesPage> {
         return CourseContent(
           semesters: semesters,
           cgpa: cgpa,
+           username: user.displayName,
         );
       },
     );

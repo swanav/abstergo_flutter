@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:abstergo_flutter/models/class_details.dart';
@@ -21,11 +22,17 @@ class _DayViewState extends State<DayView> {
 
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((SharedPreferences pref) {
-      setState(() {
-        this.semesterCode = pref.getString("semesterCode");
-        this.subGroup = pref.getString("subGroup");
-      });
+    initialize();
+  }
+
+  initialize() async {
+    final pref = await SharedPreferences.getInstance();
+    final config = await RemoteConfig.instance;
+    await config.fetch(expiration: const Duration(hours: 24));
+    await config.activateFetched();
+    setState(() {
+      this.semesterCode = config.getString('current_semester');
+      this.subGroup = pref.getString("subGroup");
     });
   }
 

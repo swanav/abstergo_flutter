@@ -247,6 +247,11 @@ class _MarksListState extends State<_MarksList> {
         }
 
         List<DocumentSnapshot> marks = List.from(snapshot.data.documents);
+
+        if(marks.length == 0) {
+          return Text("No marks data for this subject.");
+        }
+
         return ListView.builder(
           itemBuilder: (context, index) {
             ExamMark mark = ExamMark.fromMap(Map.from(marks[index].data));

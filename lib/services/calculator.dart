@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -32,31 +31,36 @@ calculateSgpa(String examCode) async {
   if (userExamRecord.exists) {
     List<Map<dynamic, dynamic>> shallowSemesters =
         List.from(userExamRecord.data['semesters']);
-    List<Map<dynamic, dynamic>> semesters = List();
-    await Future.forEach(shallowSemesters, (shallowSemester) async {
-      Map sem = Map.from(shallowSemester);
-      QuerySnapshot snapshot =
-          await docRef.collection(sem['code']).getDocuments();
-      num totalCredits = 0;
-      num totalPoints = 0;
-      if (snapshot.documents.length > 0) {
-        snapshot.documents.forEach((document) {
-          Map<dynamic, dynamic> data = document.data;
-          totalCredits += data['credits'];
-          totalPoints +=
-              gradeToGradePoint(data['gradeObtained']) * data['credits'];
-        });
-      }
-      num sgpa = totalPoints / totalCredits;
-      print(sgpa);
-      semesters.add({
-        'code': sem['code'],
-        'sgpa': sgpa,
-        'credits': totalCredits,
-      });
-    });
 
-    docRef.setData({'semesters': semesters}, merge: true);
+    QuerySnapshot snapshot = await docRef.collection(examCode).getDocuments();
+    num totalCredits = 0;
+    num totalPoints = 0;
+    if (snapshot.documents.length > 0) {
+      snapshot.documents.forEach((document) {
+        Map<dynamic, dynamic> data = document.data;
+        totalCredits += data['credits'];
+        totalPoints +=
+            gradeToGradePoint(data['gradeObtained']) * data['credits'];
+      });
+    }
+    num sgpa = totalPoints / totalCredits;
+    print('$examCode : $sgpa');
+    try {
+      List<Map<dynamic, dynamic>> semesters = shallowSemesters
+          .map((shallowSemester) => shallowSemester['code'] == examCode
+              ? <dynamic, dynamic>{
+                  'code': examCode,
+                  'sgpa': sgpa,
+                  'credits': totalCredits,
+                }
+              : shallowSemester).toList();
+      docRef.setData({'semesters': semesters}, merge: true);
+      calculateCgpa();
+    } catch (ex) {
+      print("yahi galti hai");
+      print(shallowSemesters);
+      print(ex);
+    }
   }
 }
 
@@ -75,7 +79,7 @@ calculateCgpa() async {
       totalCredits += semester['credits'];
       totalPoints += semester['sgpa'] * semester['credits'];
     });
-    cgpa = totalPoints/totalCredits;
+    cgpa = totalPoints / totalCredits;
     docRef.setData({'cgpa': cgpa}, merge: true);
   }
 }

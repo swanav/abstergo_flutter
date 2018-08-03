@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tkiosk/tkiosk.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:abstergo_flutter/models/credentials.dart';
 
@@ -14,6 +15,9 @@ void fetchPersonalInfo() async {
           .collection('profile')
           .document(credentials.firebaseId)
           .setData(profile.toMap());
+      UserUpdateInfo userUpdateInfo = UserUpdateInfo();
+      userUpdateInfo.displayName = profile.name;
+      FirebaseAuth.instance.updateProfile(userUpdateInfo);
     }
   } catch (ex) {
     print("Exception in fetching profile data.");

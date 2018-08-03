@@ -55,6 +55,11 @@ class _CourseListState extends State<CourseList> with TickerProviderStateMixin {
             return Loading();
           }
           List<DocumentSnapshot> courses = List.from(snapshot.data.documents);
+
+          if(courses.length == 0) {
+            return Text("No data available.");
+          }
+
           return ScaleTransition(
             scale: scaleAnimation,
             child: ListView.builder(

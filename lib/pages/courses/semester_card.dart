@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:abstergo_flutter/pages/layout/sgpa.dart';
 import 'package:abstergo_flutter/res/icons.dart';
+import 'package:abstergo_flutter/services/calculator.dart';
 
 class SemesterCard extends StatelessWidget {
   final String examCode;
@@ -60,12 +61,20 @@ class SemesterCard extends StatelessWidget {
                             child: Material(
                               color: Colors.transparent,
                               type: MaterialType.transparency,
-                              child: IconButton(
+                              child: PopupMenuButton(
                                 icon: Icon(
                                   AppIcons.NAV_MORE,
                                   color: Colors.grey,
                                 ),
-                                onPressed: () {},
+                                itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'Recalculate',
+                                        child: const Text('Recalculate'),
+                                      ),
+                                    ],
+                                onSelected: (string) {
+                                  calculateSgpa(examCode);
+                                },
                               ),
                             ),
                           ),
