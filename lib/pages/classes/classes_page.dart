@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+
 import 'package:abstergo_flutter/models/class_details.dart';
 import 'package:abstergo_flutter/pages/classes/day_view.dart';
 
 class ClassesPage extends StatefulWidget {
   @override
-  createState() => new _ClassesPageState();
+  createState() => _ClassesPageState();
 }
 
 class _ClassesPageState extends State<ClassesPage>
@@ -12,22 +16,39 @@ class _ClassesPageState extends State<ClassesPage>
   static final List<String> days = ["MON", "TUE", "WED", "THU", "FRI"];
 
   final List<Tab> myTabs =
-      new List.generate(5, (int index) => new Tab(text: days[index]));
+      List.generate(5, (int index) => Tab(text: days[index]));
 
   Map<String, List<ClassDetails>> timeTable;
   TabController _tabController;
 
+  String semesterCode;
+  String subGroup;
+
   @override
   void initState() {
     super.initState();
-    int today = new DateTime.now().weekday;
+    int today = DateTime.now().weekday;
     today == 6 || today == 7 ? today = 1 : today = today;
 
-    _tabController = new TabController(
+    _tabController = TabController(
       initialIndex: (today - 1),
       length: myTabs.length,
       vsync: this,
     );
+    initialize();
+  }
+
+  void initialize() async {
+    final config = await RemoteConfig.instance;
+    await config.fetch(expiration: const Duration(hours: 24));
+    await config.activateFetched();
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    var snapshot =
+        await Firestore.instance.collection('profile').document(user.uid).get();
+    setState(() {
+      this.semesterCode = config.getString('current_semester');
+      this.subGroup = snapshot.data["subGroup"];
+    });
   }
 
   @override
@@ -38,22 +59,26 @@ class _ClassesPageState extends State<ClassesPage>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new TabBar(
+    return Scaffold(
+      appBar: TabBar(
         tabs: myTabs,
         indicatorColor: Colors.blue,
         labelColor: Colors.blue,
         unselectedLabelColor: Colors.black87,
-        labelStyle: new TextStyle(fontWeight: FontWeight.w500),
+        labelStyle: TextStyle(fontWeight: FontWeight.w500),
         indicatorWeight: 1.0,
-        unselectedLabelStyle: new TextStyle(fontWeight: FontWeight.w300),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w300),
         controller: _tabController,
       ),
-      body: new TabBarView(
+      body: TabBarView(
         controller: _tabController,
         children: myTabs.map((Tab tab) {
           String day = tab.text;
-          return new DayView(day);
+          return DayView(
+            semesterCode: semesterCode,
+            subGroup: subGroup,
+            day: day,
+          );
         }).toList(),
       ),
     );

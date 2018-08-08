@@ -5,6 +5,8 @@ class ClassDetails {
   String facultyName;
   String classType;
   String classTime;
+  int hour;
+  int duration;
 
   ClassDetails({
     this.courseName,
@@ -13,6 +15,8 @@ class ClassDetails {
     this.classType,
     this.classTime,
     this.courseCode,
+    this.hour,
+    this.duration,
   });
 
   ClassDetails.fromMap(Map<dynamic, dynamic> data) {
@@ -22,6 +26,8 @@ class ClassDetails {
     facultyName = data["faculty"];
     classType = data["type"];
     classTime = data["time"];
+    hour = data["hour"];
+    duration = data["duration"];
   }
 
   Map<String, String> toMap() {

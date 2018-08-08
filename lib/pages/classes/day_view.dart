@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:abstergo_flutter/models/class_details.dart';
 import 'package:abstergo_flutter/pages/classes/day_view_row.dart';
@@ -9,58 +7,64 @@ import 'package:abstergo_flutter/pages/layout/loading.dart';
 
 class DayView extends StatefulWidget {
   final String day;
-
-  DayView(this.day);
+  final String semesterCode;
+  final String subGroup;
+  
+  DayView({this.semesterCode, this.subGroup, this.day});
 
   @override
   _DayViewState createState() => _DayViewState();
+
 }
 
 class _DayViewState extends State<DayView> {
-  String semesterCode;
-  String subGroup;
 
+  int today;
+
+  @override
   void initState() {
     super.initState();
-    initialize();
-  }
-
-  initialize() async {
-    final pref = await SharedPreferences.getInstance();
-    final config = await RemoteConfig.instance;
-    await config.fetch(expiration: const Duration(hours: 24));
-    await config.activateFetched();
+    int today = DateTime.now().weekday;
     setState(() {
-      this.semesterCode = config.getString('current_semester');
-      this.subGroup = pref.getString("subGroup");
+      this.today = today;
     });
   }
 
-  List<Widget> dayViewGenerator(classes) {
-    List<Widget> days = List();
-    classes.forEach((dynamic clas) {
-      days.add(DayViewRow(ClassDetails.fromMap(clas)));
-    });
-    return days;
+  int _day() {
+    switch(widget.day) {
+      case "MON":
+        return 1;
+      case "TUE":
+        return 2;
+      case "WED": 
+        return 3;
+      case "THU": 
+        return 4;
+      case "FRI":
+        return 5;
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
+  Widget build(BuildContext context) =>    
+    StreamBuilder(
         stream: Firestore.instance
             .collection('schedule')
-            .document(this.semesterCode)
-            .collection(this.subGroup)
+            .document(widget.semesterCode)
+            .collection(widget.subGroup)
             .document(widget.day)
             .snapshots(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData || snapshot.data.data == null) {
             return Loading();
           }
 
-          return ListView(
-            children: dayViewGenerator(snapshot.data.data['classes']),
+          var classes = List.from(snapshot.data.data['classes']);
+          return ListView.builder(
+            itemBuilder: (BuildContext context, int index) =>
+                DayViewRow(details: ClassDetails.fromMap(classes[index]), day: _day(),),
+            itemCount: classes.length,
           );
         });
   }
-}
+
