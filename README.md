@@ -2,7 +2,7 @@
 
 # abstergo_flutter
 
-A new webkiosk.
+A new webkiosk for Thapar Institute of Engineering and Technology.
 
 ## Getting Started
 
